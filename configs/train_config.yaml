@@ -1,0 +1,23 @@
+# Basic training config for the NLP fine-tune pipeline
+model:
+  model_name_or_path: "distilbert-base-uncased"
+  num_labels: 2
+training:
+  num_train_epochs: 3
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 32
+  learning_rate: 5e-5
+  weight_decay: 0.01
+  max_seq_length: 128
+  seed: 42
+data:
+  text_col: "text"
+  label_col: "label"
+  # if you provide a single CSV file, the script will split into train/validation
+  train_file: "data/train.csv"
+  validation_file: "data/validation.csv"
+mlflow:
+  tracking_uri: "http://localhost:5000"
+  experiment_name: "nlp-finetune"
+output:
+  output_dir: "outputs"

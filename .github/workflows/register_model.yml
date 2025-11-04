@@ -1,0 +1,33 @@
+name: Auto Register Best Model
+
+on:
+  workflow_dispatch:
+  # Optionally run after the hyperparam_search job via repository_dispatch or by enabling in previous workflows
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mlflow
+
+      - name: Auto-register best model
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+        run: |
+          python mlflow_pipeline/auto_register.py \
+            --experiment-name "e2e-ml-experiments" \
+            --metric "test_auc" \
+            --model-name "e2e-ml-model" \
+            --stage "Staging" \
+            --tracking-uri "${MLFLOW_TRACKING_URI}"
