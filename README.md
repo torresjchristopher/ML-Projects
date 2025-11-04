@@ -61,4 +61,32 @@ Next steps
 - Implement Hyperopt / Optuna for larger hyperparameter search.
 - Add unit tests and end-to-end integration tests for the pipeline.
 - Add monitoring (Prometheus/Grafana) and structured logs.
+
+Tech stack — components and responsibilities
+
+Data engineering
+Pandas — EDA, prototyping, local preprocessing
+NumPy — numeric processing
+PySpark — scalable/distributed preprocessing & feature generation (template hooks included)
+Modeling
+XGBoost, LightGBM, CatBoost — candidate gradient-boosted tree models for tabular data
+scikit-learn — pipelines, RandomizedSearchCV, metrics, model serialization glue
+Experiment & model management (MLOps)
+MLflow — experiment tracking, artifact storage, model logging, and model registry
+Serving & API
+FastAPI — lightweight model-serving API
+uvicorn — ASGI server for FastAPI
+Packaging & containerization
+Dockerfile — container image build for serving app
+Kubernetes manifests (k8s.yaml) — Deployment, Service, HPA skeleton for cluster orchestration
+CI/CD & automation
+GitHub Actions — lint/test, build & push container to GHCR, optional deploy-to-k8s step
+Cloud & storage
+Intended to integrate with AWS SageMaker or Google Vertex AI for managed training/serving (optional)
+boto3 included for AWS interactions (artifact upload, S3)
+Dev tooling & notebooks
+Jupyter notebooks for EDA and modeling prototypes
+Makefile for common commands
+Utilities
+PyYAML, python-dotenv, joblib, pydantic, requests
 ```
