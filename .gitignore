@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+*.env
+.ipynb_checkpoints
+mlruns/
+mlflow.db
+*.parquet
+*.log
+*.tar
+.DS_Store

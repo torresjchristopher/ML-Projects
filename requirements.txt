@@ -1,0 +1,16 @@
+pandas
+numpy
+scikit-learn
+pyspark==3.3.2
+xgboost
+lightgbm
+catboost
+mlflow
+boto3
+fastapi
+uvicorn[standard]
+pyyaml
+joblib
+python-dotenv
+pydantic
+requests
