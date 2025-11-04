@@ -49,4 +49,41 @@ Notes & next steps
 - Add container image push to your registry and deploy to Cloud Run / EC2 / Kubernetes.
 - Add monitoring (Prometheus/Grafana) and model performance monitoring.
 
+Tech stack — components and responsibilities
+
+Modeling & ML
+Hugging Face Transformers (PyTorch backend) — tokenizer, model architectures, Trainer API for fine-tuning
+PyTorch — model runtime and training backend
+scikit-learn — metrics and utility helpers (accuracy, f1, splits)
+Data
+pandas — CSV ingestion, basic cleaning and preprocessing
+Hugging Face datasets (datasets) — convenient dataset wrappers, tokenized datasets
+Experiment tracking & model registry
+MLflow — tracking server, logging params/metrics/artifacts, model registry (auto-registration helper included)
+Hyperparameter search & optimization (optional/add-on)
+Optuna (recommended) — efficient hyperparameter tuning integrated with Trainer and MLflow (can be added)
+Serving & API
+FastAPI — production-ready HTTP inference API
+uvicorn — ASGI server
+transformers.pipeline or model/tokenizer loading — inference logic in the API
+Packaging & containerization
+Docker — container image for the FastAPI service
+(Kubernetes manifests provided as templates) — deployment, service, HPA skeleton
+CI/CD & automation
+GitHub Actions — lint, unit tests, notebook validation (nbval), build & push Docker image, optional k8s deploy, optional auto-register workflow for MLflow
+Dev tooling & tests
+pytest + nbval — unit tests and notebook validation
+pre-commit (Black, isort, flake8, nbstripout) — code quality and notebook hygiene
+Cloud integrations (optional)
+AWS (boto3 / EC2 / SageMaker) or GCP (Cloud Run / Vertex AI) — deployment targets and artifact storage
+Utilities
+pydantic, python-dotenv, PyYAML, joblib — config, env, and artifact helpers
+Recommended versions (tested/target)
+
+Python: 3.9 (works on 3.8+ but repo targets 3.9)
+transformers >= 4.30.x
+datasets >= 2.x
+torch >= 1.13.x (match available CUDA for GPUs)
+mlflow latest compatible with above stack
+
 ```
