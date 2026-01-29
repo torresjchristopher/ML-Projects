@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sentiment Blog</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .post { margin-bottom: 1rem; }
+    .tag { font-weight: bold; padding: 0.25em 0.5em; border-radius: 4px; }
+    .positive { color: green; }
+    .neutral { color: gray; }
+    .negative { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Sentiment Blog</h1>
+
+  <form action="/submit" method="POST">
+    <textarea name="content" rows="5" cols="60" placeholder="Write your blog post..."></textarea><br>
+    <button type="submit">Post</button>
+  </form>
+
+  <hr>
+
+  <% posts.each do |post| %>
+    <div class="post">
+      <p><%= post[:content] %></p>
+      <span class="tag <%= post[:sentiment] %>"><%= post[:sentiment].capitalize %></span>
+    </div>
+  <% end %>
+</body>
+</html>
