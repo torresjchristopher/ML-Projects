@@ -1,0 +1,5 @@
+sentence-transformers
+torch
+PyMuPDF
+python-docx
+streamlit
