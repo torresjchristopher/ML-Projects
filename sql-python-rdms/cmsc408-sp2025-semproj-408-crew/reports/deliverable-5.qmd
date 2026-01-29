@@ -1,0 +1,549 @@
+---
+title: Design Document - Deliverable 5
+
+## Useful references:
+# - Basic Markdown: https://quarto.org/docs/authoring/markdown-basics.html
+# - Quarto figures: https://quarto.org/docs/authoring/figures.html
+# - HTML document basics: https://quarto.org/docs/output-formats/html-basics.html
+# - Quarto guide: https://quarto.org/docs/guide/
+# - VS Code and Quarto: https://quarto.org/docs/tools/vscode.html
+#   (RTFM and GET THE EXTENSION!!!!)
+---
+
+<!--
+GUIDANCE:
+- DO NOT CHANGE the section labels or levels.  The autograder will be looking for these to match.
+- The autograder WILL be looking for snippets of my text and taking off points if it finds anything that I provide, 
+except for section labels and levels.
+- Add your text to each section, then DELETE mine.  
+- Use your own words, and NOT those of ChatGPT!
+- THINK about what you put in each section.
+-->
+
+The Country Club Membership Database aims to streamline the management of membership records, payment histories, event participation, and member-specific services for a country club. This database will ensure that all member and service information is up-to-date, easily accessible, and securely stored. By centralizing key member details, event management, and billing systems, the country club can offer better personalized services and improve operational efficiency.
+
+Key features of the database include tracking member personal information, membership status, payment history, activity participation, event bookings, and more. This system is designed to provide benefits for both country club members (who can manage their personal details, payments, and bookings) and workers (who can oversee member information, track activities, and assist with bookings).
+
+
+
+* [[Link to repository](https://github.com/cmsc-vcu/cmsc408-sp2025-del4-408-crew/tree/main)]
+* [[Direct link to video pitch](https://cdnapisec.kaltura.com/p/1888231/sp/188823100/embedIframeJs/uiconf_id/28242251/partner_id/1888231?iframeembed=true&playerId=kaltura_player&entry_id=1_ls096t3m&flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=1_q1mdh3mp)]
+* [[Direct link to design video](https://cdnapisec.kaltura.com/p/1888231/sp/188823100/embedIframeJs/uiconf_id/28242251/partner_id/1888231?iframeembed=true&playerId=kaltura_player&entry_id=1_u4sp09yx&flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=1_3ynemgix)]
+
+# Design Video
+
+<iframe id="kaltura_player" src="https://cdnapisec.kaltura.com/p/1888231/sp/188823100/embedIframeJs/uiconf_id/28242251/partner_id/1888231?iframeembed=true&playerId=kaltura_player&entry_id=1_u4sp09yx&flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=1_3ynemgix" width="400" height="285" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay ; fullscreen; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="Database Design: Step 2"></iframe>
+
+# Problem Description
+
+## Problem domain
+
+A country club offers memberships to many different individuals who utilize the various different facilities and services offered. Club members pay monthly fees for their individual memberships and also may pay for other services and activities offered by the club. A database to manage the country club memberships would track various details of each member including names, contact information, membership status, membership type, payment history, attendance records, etc. The database would enable the club to maintain up to date and accurate member records from billing, activity tracking, and personal information reducing any errors.
+
+## Need
+
+The database is important to efficiently maintain the membership, as it safely stores member information type of membership, membership payment history and billing, it helps keep track of events in which the country club has, and what member and type of membership access allows for attendance to the event  - Allows for personalized tracking of members preferred activities, easier to cater to them on an individual basis (Transaction is easier). Up to date contact information is also a big issue so storing the recent information of members is a problem that the database eliminates (doing so of course in a secure manner.)
+
+## Context, scope and perspective
+
+The DB is for Country Club Members and Country Club Owners. 
+
+Country Club Members will receive additional expectations for their arrival and the duration of their stay due to these features. With isolated data used from purchase history while at the club for example, We will make it easier than ever before for more people to be treated with the expectation of their arrival. Such as the results of an increase in marketing for a simple item or rather the time and duration of their stay to even result in specific lightings and patterns for that viewer to create an anticipated ‘entrance’ over time.
+For Country Club owners, Business owners can creatively use our tool to generate any data or statistics related to any Country club member. 
+
+This data base also functions upon real time management and operations of the business. 
+The database is for the management team of the Country club. A key feature of the database is for the coach in the domain of a sports team as the club manager has to provide access to the database to all country club employees and they can update, add, and delete things in and out of the database. 
+
+Data retrieval is also given to specific department manager so they can easily access the information and relay it to their team.
+
+## User roles and use cases
+
+The different user roles will include the member role and the worker role.
+
+
+Member role:
+Needs:
+* Personal Information Management
+* Payment Information
+* Event/Activity History
+* Access Amenities and Services
+Database Usage:
+* Profile Management; Members can log in to update or modify their contact information and membership type.
+* Payment Management: Members will be able to view past transactions and update payment information.
+* Event/Activity Tracking: Members will be able to view past and upcoming events and activities allowing for members to track their participation.
+* Booking/Reservations: Members will be able to use the system to book or reserve amenities, events, or services.
+
+
+Worker Role:
+Needs:
+* Manage Member Accounts
+* Event/Activity Management
+* Payment Monitoring
+* Provide Member Assistance 
+* Personal Account Management
+Database Usage:
+* Administrative Access: Workers will be able to update and retrieve information regarding members, event/activities, payments, and other services.
+* Member Assistance: Workers will be able to provide assistance to members such as confirming booking, updating information, providing event details, etc.
+* Manage Personal Information: Workers will be able to manage and update their own personal information and view job information
+
+
+## Security and Privacy
+
+### Authentication and Access Control
+
+To ensure secure and authorized access, user authentication mechanisms such as usernames and passwords will be employed. Multi-factor authentication (MFA) may also be implemented for sensitive operations or high-privilege user roles to add an additional layer of security.
+
+Role-based access control (RBAC) will be the primary access control strategy, where users (both members and workers) are assigned different roles such as "Member" or "Worker" with associated permissions tailored to their needs. This ensures that users only have access to the relevant parts of the system and data based on their role. For example, a worker can manage member accounts, but members can only access and manage their own data.
+
+### Data Protection and Encryption
+
+Sensitive data, such as personally identifiable information (PII) and payment information, will be encrypted both at rest and in transit. AES encryption will be used for securing data at rest (e.g., storing member information, transaction history).
+
+Personally identifiable information (PII) will be treated with utmost security, ensuring it is accessed only by authorized personnel.
+
+## Ethical and Professional Responsibilities
+
+### Data Ethics
+
+There are potential ethical concerns related to the collection, storage, and analysis of member data, especially given the sensitive nature of PII (e.g., names, contact details, payment information). Members must be fully informed of the types of data being collected, how it will be used, and the measures in place to protect it. Misuse of this data could result in violations of privacy, so it is essential to have clear guidelines and policies in place regarding data access and handling.
+
+### Bias and Fairness
+
+The design of the database aims to minimize bias by ensuring equal access for all members and workers, regardless of their background or membership type. Special care should be taken in ensuring that the database does not inadvertently introduce or reinforce biases in how data is stored or accessed. For example, workers should not have the ability to modify or deny access to information based on personal biases, and the system should allow for fair treatment in resource allocation or activity assignments. The database should be designed to promote fairness in terms of access to services, based on membership status and preferences, without discriminating against any user group.
+
+### Data Ownership and Consent
+
+Ownership of the data resides with the members of the country club, as they provide their personal information and payment details. However, the club has a legal obligation to store and manage the data for specific business purposes (e.g., billing, event management). Members will be fully informed about the collection of their data and how it will be used, ensuring that explicit consent is obtained before storing sensitive information. Consent can be given via an opt-in form, which will be part of the registration and membership process.
+
+### Accountability and Transparency
+
+The responsibility lies with the country club’s management and database administrators. It is critical that there are mechanisms in place to identify and resolve issues quickly. Regular audits and logging of access to sensitive data can help ensure that any improper access is traced back to the responsible party. Transparency will be maintained by clearly communicating policies regarding data handling, and any changes or incidents (such as data breaches) should be disclosed to members promptly.
+
+### Legal and Compliance Issues
+
+California Consumer Privacy Act (CCPA) for users in California, which mandates similar protections for user privacy.
+Health Insurance Portability and Accountability Act (HIPAA), if health-related data is stored, such as in the case of a country club offering wellness services or fitness programs.
+Other local or national data protection laws depending on the region where the country club operates.
+The database should also follow industry standards for data protection (e.g., PCI-DSS compliance for payment information). Ensuring that the country club meets these compliance requirements will help avoid legal issues and maintain member trust.
+
+
+# Database Design
+
+## Entity-relationship diagrams
+
+### Chen Diagram
+```{dot}
+graph ER {
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    bgcolor=transparent;
+    layout=neato  
+    scale=1.2    
+
+
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+
+    // Define entity nodes
+    node [shape=box];
+    Members; MembershipType; Payments; Events; Worker;
+
+
+    // Define attribute nodes
+    node [shape=ellipse];
+    memberID; name; contactInfo;
+    typeID; typeName; monthlyFee;
+    paymentID; amount; paymentDate;
+    eventID; eventName; eventDate;
+    workerID; workerName; role;
+
+
+    // Define relationship nodes
+    node [shape=diamond, style=filled, color=lightgrey];
+    Belongs; Makes; Attends; Organizes;
+
+
+    // Connect Members to their attributes
+    Members -- memberID;
+    Members -- name;
+    Members -- contactInfo;
+
+
+    // Connect MembershipType to its attributes
+    MembershipType -- typeID;
+    MembershipType -- typeName;
+    MembershipType -- monthlyFee;
+
+
+    // Connect Payments to its attributes
+    Payments -- paymentID;
+    Payments -- amount;
+    Payments -- paymentDate;
+
+
+    // Connect Events to its attributes
+    Events -- eventID;
+    Events -- eventName;
+    Events -- eventDate;
+
+
+    // Connect Worker to its attributes
+    Worker -- workerID;
+    Worker -- workerName;
+    Worker -- role;
+
+
+    // Relationships
+
+
+    // Each Member belongs to one MembershipType, and each MembershipType can be assigned to many Members.
+    Members -- Belongs [label="1"];
+    Belongs -- MembershipType [label="m"];
+
+
+    // Each Member makes many Payments; each Payment is made by one Member.
+    Members -- Makes [label="1"];
+    Makes -- Payments [label="m"];
+
+
+    // Members attend Events – a many-to-many relationship.
+    Members -- Attends [label="m"];
+    Attends -- Events [label="m"];
+
+
+    // Each Event is organized by one Worker, while a Worker can organize many Events.
+    Events -- Organizes [label="1"];
+    Organizes -- Worker [label="m"];
+
+
+}
+```
+
+
+### Crows Foot diagram
+
+
+```{mermaid}
+erDiagram
+    MEMBERS {
+        int memberID
+        string name
+        string contactInfo
+    }
+    MEMBERSHIP_TYPE {
+        int typeID
+        string typeName
+        float monthlyFee
+    }
+    PAYMENTS {
+        int paymentID
+        float amount
+        date paymentDate
+    }
+    EVENTS {
+        int eventID
+        string eventName
+        date eventDate
+    }
+    WORKER {
+        int workerID
+        string workerName
+        string role
+    }
+
+
+    MEMBERSHIP_TYPE ||--o{ MEMBERS : "has"
+    MEMBERS ||--o{ PAYMENTS : "makes"
+    MEMBERS o{--o{ EVENTS : "attends"
+    WORKER ||--o{ EVENTS : "organizes"
+
+
+
+
+```
+
+
+## Relational schemas
+
+MEMBERS(
+    member_id INT PRIMARY KEY AUTO_INCREMENT,   -- Unique identifier for each member
+    first_name VARCHAR(50) NOT NULL,               -- Member's first name; up to 50 characters
+    last_name VARCHAR(50) NOT NULL,                -- Member's last name; up to 50 characters
+    contact_info VARCHAR(100),                     -- Contact details (email/phone), optional length up to 100 characters
+    membership_type_id INT NOT NULL,               -- Reference to the type of membership
+    CONSTRAINT fk_membership_type FOREIGN KEY (membership_type_id)
+         REFERENCES MEMBERSHIP_TYPE(type_id)
+)
+
+MEMBERSHIP_TYPE(
+    type_id INT PRIMARY KEY AUTO_INCREMENT,       -- Unique identifier for each membership type
+    type_name VARCHAR(50) NOT NULL,                  -- Name of the membership type (e.g., Standard, Premium)
+    monthly_fee DECIMAL(10,2) NOT NULL               -- Monthly fee (must be positive; two decimal places)
+)
+
+PAYMENTS(
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,     -- Unique identifier for each payment transaction
+    member_id INT NOT NULL,                          -- Foreign key linking to the member who made the payment
+    amount DECIMAL(10,2) NOT NULL CHECK (amount > 0),  -- Payment amount; must be positive
+    payment_date DATE NOT NULL,                      -- Date of payment
+    payment_method VARCHAR(20),                      -- Method of payment (e.g., credit card, cash)
+    description VARCHAR(255),                        -- Optional details about the payment
+    CONSTRAINT fk_payment_member FOREIGN KEY (member_id)
+         REFERENCES MEMBERS(member_id)
+)
+
+EVENTS(
+    event_id INT PRIMARY KEY AUTO_INCREMENT,       -- Unique event identifier
+    event_name VARCHAR(100) NOT NULL,                -- Name of the event/activity
+    event_date DATE NOT NULL,                        -- Date (or datetime) when the event occurs
+    organizer_id INT NOT NULL,                       -- Reference to the Worker organizing the event
+    CONSTRAINT fk_event_organizer FOREIGN KEY (organizer_id)
+         REFERENCES WORKER(worker_id)
+)
+
+WORKER(
+    worker_id INT PRIMARY KEY AUTO_INCREMENT,      -- Unique identifier for each club worker/employee
+    worker_name VARCHAR(50) NOT NULL,                -- Full name of the worker
+    role VARCHAR(50) NOT NULL,                       -- Role or job title (e.g., Manager, Coach)
+    contact_info VARCHAR(100)                        -- Worker’s contact details
+)
+
+EVENT_ATTENDANCE(
+    member_id INT NOT NULL,                          -- Reference to the member attending the event
+    event_id INT NOT NULL,                           -- Reference to the event attended
+    PRIMARY KEY (member_id, event_id),               -- Composite primary key ensures each member-event pair is unique
+    CONSTRAINT fk_attendance_member FOREIGN KEY (member_id)
+         REFERENCES MEMBERS(member_id),
+    CONSTRAINT fk_attendance_event FOREIGN KEY (event_id)
+         REFERENCES EVENTS(event_id)
+)
+
+
+## Functional Dependencies and Normalization
+
+MEMBERS
+
+member_id → {first_name, last_name, contact_info, membership_type_id}
+A member's ID uniquely determines their first name, last name, contact information, and membership type.
+membership_type_id → {membership_type_name, monthly_fee}
+A specific membership type ID determines the membership type name and monthly fee.
+MEMBERSHIP_TYPE
+
+type_id → {type_name, monthly_fee}
+The membership type ID uniquely determines the membership type name and monthly fee.
+PAYMENTS
+
+payment_id → {member_id, amount, payment_date, payment_method, description}
+A payment ID uniquely determines the associated member, amount, payment date, method, and description.
+member_id → {payment_id, amount, payment_date, payment_method, description}
+A member can have multiple payments, but each payment corresponds to a unique ID.
+EVENTS
+
+event_id → {event_name, event_date, organizer_id}
+The event ID uniquely determines the event's name, date, and the organizer's ID.
+WORKER
+
+worker_id → {worker_name, role, contact_info}
+The worker ID uniquely determines the worker's name, role, and contact information.
+EVENT_ATTENDANCE
+
+(member_id, event_id) → {member_id, event_id}
+A unique pair of member ID and event ID determines attendance.
+
+Normalization helps achieve an efficient database design. The most common normal forms are:
+
+First Normal Form (1NF): Ensures that each table has atomic (indivisible) values, and each record is unique.
+
+All the tables in the schema already satisfy 1NF, as they have no repeating groups or arrays.
+Second Normal Form (2NF): In addition to 1NF, all non-key attributes must fully depend on the entire primary key.
+
+The schema already satisfies 2NF. For instance, in the PAYMENTS table, the non-key attributes (amount, payment_date, etc.) depend entirely on payment_id.
+Third Normal Form (3NF): Ensures that all attributes are directly dependent on the primary key and not on other non-key attributes (i.e., no transitive dependencies).
+
+The schema satisfies 3NF. For example, in the MEMBERSHIP_TYPE table, the monthly_fee directly depends on type_id, and there are no other transitive dependencies.
+Boyce-Codd Normal Form (BCNF): A stricter version of 3NF, where every determinant is a candidate key.
+
+The schema is in BCNF, as all the functional dependencies involve candidate keys. For example, member_id is the candidate key in MEMBERS, and all attributes depend on it.
+Fourth Normal Form (4NF): Eliminates multi-valued dependencies, ensuring that each non-key attribute depends on the key and not on any other non-key attribute.
+
+The schema is in 4NF. There are no multi-valued dependencies present, as no attributes in any table depend on other non-key attributes.
+
+## Specific queries
+
+List all members and their membership types.
+Relational Algebra:
+πfirst_name,last_name,type_name(MEMBERS⋈MEMBERSHIP_TYPE)
+
+Find the total payment amount for each member.
+Relational Algebra:
+γmember_id,SUM(amount)(PAYMENTS)
+
+Retrieve the payment history of a specific member (e.g., member_id = 1).
+Relational Algebra:
+σmember_id=1(PAYMENTS)
+
+List all events scheduled for a specific date (e.g., event_date = '2025-03-01').
+Relational Algebra:
+σevent_date=′2025−03−01′(EVENTS)
+
+Find all members who attended a specific event (e.g., event_id = 5).
+Relational Algebra:
+πfirst_name,last_name(σevent_id=5(EVENT_ATTENDANCE⋈MEMBERS))
+
+Get a list of all workers and their roles.
+Relational Algebra:
+πworker_name,role(WORKER)
+
+Retrieve the details of members who have made payments in the last month.
+Relational Algebra:
+σpayment_date>CURRENT_DATE−30(PAYMENTS⋈MEMBERS)
+
+Get the total number of members per membership type.
+Relational Algebra:
+γmembership_type_id,COUNT(member_id)(MEMBERS)
+
+Retrieve the names of all events organized by a specific worker (e.g., worker_id = 2).
+Relational Algebra:
+πevent_name(σorganizer_id=2(EVENTS))
+
+Find the most expensive membership type based on the monthly fee.
+Relational Algebra:
+πtype_name,monthly_fee(σmonthly_fee=MAX(monthly_fee)(MEMBERSHIP_TYPE))
+
+List all events that a specific member (e.g., member_id = 3) has attended.
+Relational Algebra:
+πevent_name(σmember_id=3(EVENT_ATTENDANCE⋈EVENTS))
+
+Retrieve all members who have attended more than 5 events.
+Relational Algebra:
+γmember_id,COUNT(event_id)(EVENT_ATTENDANCE)HAVING COUNT(event_id) > 5
+
+Get a list of all members who have a 'Premium' membership.
+Relational Algebra:
+πfirst_name,last_name(σtype_name=′Premium′(MEMBERS⋈MEMBERSHIP_TYPE))
+
+List all payments made using a specific payment method (e.g., 'credit card').
+Relational Algebra:
+σpayment_method=′creditcard′(PAYMENTS)
+
+Find the total number of events organized by each worker.
+Relational Algebra:
+γorganizer_id,COUNT(event_id)(EVENTS)
+
+Find all members who have not made any payments in the last year.
+Relational Algebra:
+πfirst_name,last_name(σpayment_date<CURRENT_DATE−365(MEMBERS−PAYMENTS))
+
+Retrieve all workers who have a 'Manager' role.
+Relational Algebra:
+σrole=′Manager′(WORKER)
+
+Get a list of all events that are free of charge (no payments recorded).
+Relational Algebra:
+πevent_name(σpayment_id=NULL(EVENTS⋈PAYMENTS))
+
+Find the total amount of payments made by a specific member (e.g., member_id = 2).
+Relational Algebra:
+γSUM(amount)(σ member_id=2(PAYMENTS))
+
+Retrieve all members who attended events in a specific month (e.g., '2025-03').
+Relational Algebra: \sigma_{\text{event\_date} \, \text{LIKE} '2025-03%'} (\text{EVENT\_ATTENDANCE} \bowtie \text{MEMBERS})
+
+## Sample Data
+
+### Student table
+
+
+Below is the sample data:
+
+### **MEMBERS Table**
+
+| member_id | first_name | last_name | contact_info      | membership_type_id |
+|-----------|------------|-----------|-------------------|--------------------|
+| 1         | John       | Doe       | john@example.com  | 1                  |
+| 2         | Jane       | Smith     | jane@example.com  | 2                  |
+| 3         | Aisha      | Hassan    | aisha@example.com | 1                  |
+| 4         | Kenji      | Takahashi | kenji@example.com | 3                  |
+| 5         | Leila      | Nguyen    | leila@example.com | 2                  |
+
+### **MEMBERSHIP_TYPE Table**
+
+| type_id | type_name | monthly_fee |
+|---------|-----------|-------------|
+| 1       | Standard  | 50.00       |
+| 2       | Premium   | 100.00      |
+| 3       | VIP       | 150.00      |
+
+### **PAYMENTS Table**
+
+| payment_id | member_id | amount | payment_date | payment_method | description       |
+|------------|-----------|--------|--------------|----------------|-------------------|
+| 1          | 1         | 50.00  | 2025-02-01   | Credit Card    | Monthly payment   |
+| 2          | 2         | 100.00 | 2025-02-10   | Cash           | Monthly payment   |
+| 3          | 3         | 50.00  | 2025-02-05   | Credit Card    | Monthly payment   |
+| 4          | 4         | 150.00 | 2025-02-15   | Credit Card    | Monthly payment   |
+
+### **EVENTS Table**
+
+| event_id | event_name          | event_date | organizer_id |
+|----------|---------------------|------------|--------------|
+| 1        | Yoga Class          | 2025-03-01 | 1            |
+| 2        | Golf Tournament     | 2025-03-05 | 2            |
+| 3        | Swimming Competition| 2025-03-07 | 3            |
+| 4        | Wine Tasting        | 2025-03-10 | 4            |
+
+### **WORKER Table**
+
+| worker_id | worker_name | role        | contact_info      |
+|-----------|-------------|-------------|-------------------|
+| 1         | Anna        | Trainer     | anna@example.com  |
+| 2         | Mark        | Coach       | mark@example.com  |
+| 3         | Sara        | Event Planner| sara@example.com  |
+| 4         | Tom         | Manager     | tom@example.com   |
+
+### **EVENT_ATTENDANCE Table**
+
+| member_id | event_id |
+|-----------|----------|
+| 1         | 1        |
+| 2         | 2        |
+| 3         | 3        |
+| 4         | 4        |
+
+
+## Project Management
+
+| Task                             | Mar 2 | Mar 5 | Mar 10 | Mar 13 | Mar 21 | Mar 28 | Apr 5 | Apr 10 | Apr 16 | Apr 23 | Apr 29 |
+|-----------------------------------|-------|-------|--------|--------|--------|--------|-------|--------|--------|--------|--------|
+| 1. Initial Planning & Requirements| ███   |       |        |        |        |        |       |        |        |        |        |
+| 2. Design Phase                   |       | ███   |        |        |        |        |       |        |        |        |        |
+| 3. Setup Database Environment     |       |       | ███    |        |        |        |       |        |        |        |        |
+| 4. Data Modeling and Development  |       |       |        | ███    |        |        |       |        |        |        |        |
+| 5. Backend Development            |       |       |        |        | ███    |        |       |        |        |        |        |
+| 6. Testing & QA                   |       |       |        |        |        | ███    |       |        |        |        |        |
+| 7. Report Draft                   |       |       |        |        |        |        | ███   |        |        |        |        |
+| 8. Finalizing Database & User Test|       |       |        |        |        |        |       | ███    |        |        |        |
+| 9. Final Report Writing           |       |       |        |        |        |        |       |        | ███    |        |        |
+| 10. Final Review & Submission     |       |       |        |        |        |        |       |        |        | ███    | ███    |
+
+
+
+# Reflection
+
+What did you like the most about this project?
+: I really enjoyed the creative aspect of designing the database. It was interesting to think about the structure and relationships between different entities, and how the data would flow in a real-world system. I also liked how I could visually represent this design in the video, making it easier to explain complex ideas in a simple way.
+
+What was most difficult about this project?
+: The most challenging part of the project was deciding on the right relationships between tables and ensuring that the database design would scale well in the future.
+
+What additional tips or tricks could I provide to make this assignment easier to accomplish?
+: none
+
+
+# README
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+
+

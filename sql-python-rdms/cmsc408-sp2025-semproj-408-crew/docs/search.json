@@ -1,0 +1,205 @@
+[
+  {
+    "objectID": "deliverable-5.html",
+    "href": "deliverable-5.html",
+    "title": "Design Document - Deliverable 5",
+    "section": "",
+    "text": "The Country Club Membership Database aims to streamline the management of membership records, payment histories, event participation, and member-specific services for a country club. This database will ensure that all member and service information is up-to-date, easily accessible, and securely stored. By centralizing key member details, event management, and billing systems, the country club can offer better personalized services and improve operational efficiency.\nKey features of the database include tracking member personal information, membership status, payment history, activity participation, event bookings, and more. This system is designed to provide benefits for both country club members (who can manage their personal details, payments, and bookings) and workers (who can oversee member information, track activities, and assist with bookings)."
+  },
+  {
+    "objectID": "deliverable-5.html#problem-domain",
+    "href": "deliverable-5.html#problem-domain",
+    "title": "Design Document - Deliverable 5",
+    "section": "Problem domain",
+    "text": "Problem domain\nA country club offers memberships to many different individuals who utilize the various different facilities and services offered. Club members pay monthly fees for their individual memberships and also may pay for other services and activities offered by the club. A database to manage the country club memberships would track various details of each member including names, contact information, membership status, membership type, payment history, attendance records, etc. The database would enable the club to maintain up to date and accurate member records from billing, activity tracking, and personal information reducing any errors."
+  },
+  {
+    "objectID": "deliverable-5.html#need",
+    "href": "deliverable-5.html#need",
+    "title": "Design Document - Deliverable 5",
+    "section": "Need",
+    "text": "Need\nThe database is important to efficiently maintain the membership, as it safely stores member information type of membership, membership payment history and billing, it helps keep track of events in which the country club has, and what member and type of membership access allows for attendance to the event - Allows for personalized tracking of members preferred activities, easier to cater to them on an individual basis (Transaction is easier). Up to date contact information is also a big issue so storing the recent information of members is a problem that the database eliminates (doing so of course in a secure manner.)"
+  },
+  {
+    "objectID": "deliverable-5.html#context-scope-and-perspective",
+    "href": "deliverable-5.html#context-scope-and-perspective",
+    "title": "Design Document - Deliverable 5",
+    "section": "Context, scope and perspective",
+    "text": "Context, scope and perspective\nThe DB is for Country Club Members and Country Club Owners.\nCountry Club Members will receive additional expectations for their arrival and the duration of their stay due to these features. With isolated data used from purchase history while at the club for example, We will make it easier than ever before for more people to be treated with the expectation of their arrival. Such as the results of an increase in marketing for a simple item or rather the time and duration of their stay to even result in specific lightings and patterns for that viewer to create an anticipated ‘entrance’ over time. For Country Club owners, Business owners can creatively use our tool to generate any data or statistics related to any Country club member.\nThis data base also functions upon real time management and operations of the business. The database is for the management team of the Country club. A key feature of the database is for the coach in the domain of a sports team as the club manager has to provide access to the database to all country club employees and they can update, add, and delete things in and out of the database.\nData retrieval is also given to specific department manager so they can easily access the information and relay it to their team."
+  },
+  {
+    "objectID": "deliverable-5.html#user-roles-and-use-cases",
+    "href": "deliverable-5.html#user-roles-and-use-cases",
+    "title": "Design Document - Deliverable 5",
+    "section": "User roles and use cases",
+    "text": "User roles and use cases\nThe different user roles will include the member role and the worker role.\nMember role: Needs: * Personal Information Management * Payment Information * Event/Activity History * Access Amenities and Services Database Usage: * Profile Management; Members can log in to update or modify their contact information and membership type. * Payment Management: Members will be able to view past transactions and update payment information. * Event/Activity Tracking: Members will be able to view past and upcoming events and activities allowing for members to track their participation. * Booking/Reservations: Members will be able to use the system to book or reserve amenities, events, or services.\nWorker Role: Needs: * Manage Member Accounts * Event/Activity Management * Payment Monitoring * Provide Member Assistance * Personal Account Management Database Usage: * Administrative Access: Workers will be able to update and retrieve information regarding members, event/activities, payments, and other services. * Member Assistance: Workers will be able to provide assistance to members such as confirming booking, updating information, providing event details, etc. * Manage Personal Information: Workers will be able to manage and update their own personal information and view job information"
+  },
+  {
+    "objectID": "deliverable-5.html#security-and-privacy",
+    "href": "deliverable-5.html#security-and-privacy",
+    "title": "Design Document - Deliverable 5",
+    "section": "Security and Privacy",
+    "text": "Security and Privacy\n\nAuthentication and Access Control\nTo ensure secure and authorized access, user authentication mechanisms such as usernames and passwords will be employed. Multi-factor authentication (MFA) may also be implemented for sensitive operations or high-privilege user roles to add an additional layer of security.\nRole-based access control (RBAC) will be the primary access control strategy, where users (both members and workers) are assigned different roles such as “Member” or “Worker” with associated permissions tailored to their needs. This ensures that users only have access to the relevant parts of the system and data based on their role. For example, a worker can manage member accounts, but members can only access and manage their own data.\n\n\nData Protection and Encryption\nSensitive data, such as personally identifiable information (PII) and payment information, will be encrypted both at rest and in transit. AES encryption will be used for securing data at rest (e.g., storing member information, transaction history).\nPersonally identifiable information (PII) will be treated with utmost security, ensuring it is accessed only by authorized personnel."
+  },
+  {
+    "objectID": "deliverable-5.html#ethical-and-professional-responsibilities",
+    "href": "deliverable-5.html#ethical-and-professional-responsibilities",
+    "title": "Design Document - Deliverable 5",
+    "section": "Ethical and Professional Responsibilities",
+    "text": "Ethical and Professional Responsibilities\n\nData Ethics\nThere are potential ethical concerns related to the collection, storage, and analysis of member data, especially given the sensitive nature of PII (e.g., names, contact details, payment information). Members must be fully informed of the types of data being collected, how it will be used, and the measures in place to protect it. Misuse of this data could result in violations of privacy, so it is essential to have clear guidelines and policies in place regarding data access and handling.\n\n\nBias and Fairness\nThe design of the database aims to minimize bias by ensuring equal access for all members and workers, regardless of their background or membership type. Special care should be taken in ensuring that the database does not inadvertently introduce or reinforce biases in how data is stored or accessed. For example, workers should not have the ability to modify or deny access to information based on personal biases, and the system should allow for fair treatment in resource allocation or activity assignments. The database should be designed to promote fairness in terms of access to services, based on membership status and preferences, without discriminating against any user group.\n\n\nData Ownership and Consent\nOwnership of the data resides with the members of the country club, as they provide their personal information and payment details. However, the club has a legal obligation to store and manage the data for specific business purposes (e.g., billing, event management). Members will be fully informed about the collection of their data and how it will be used, ensuring that explicit consent is obtained before storing sensitive information. Consent can be given via an opt-in form, which will be part of the registration and membership process.\n\n\nAccountability and Transparency\nThe responsibility lies with the country club’s management and database administrators. It is critical that there are mechanisms in place to identify and resolve issues quickly. Regular audits and logging of access to sensitive data can help ensure that any improper access is traced back to the responsible party. Transparency will be maintained by clearly communicating policies regarding data handling, and any changes or incidents (such as data breaches) should be disclosed to members promptly.\n\n\nLegal and Compliance Issues\nCalifornia Consumer Privacy Act (CCPA) for users in California, which mandates similar protections for user privacy. Health Insurance Portability and Accountability Act (HIPAA), if health-related data is stored, such as in the case of a country club offering wellness services or fitness programs. Other local or national data protection laws depending on the region where the country club operates. The database should also follow industry standards for data protection (e.g., PCI-DSS compliance for payment information). Ensuring that the country club meets these compliance requirements will help avoid legal issues and maintain member trust."
+  },
+  {
+    "objectID": "deliverable-5.html#entity-relationship-diagrams",
+    "href": "deliverable-5.html#entity-relationship-diagrams",
+    "title": "Design Document - Deliverable 5",
+    "section": "Entity-relationship diagrams",
+    "text": "Entity-relationship diagrams\n\nChen Diagram\n\n\n\n\n\n\n\nER\n\n\nMembers\n\nMembers\n\n\n\nmemberID\n\nmemberID\n\n\n\nMembers--memberID\n\n\n\n\nname\n\nname\n\n\n\nMembers--name\n\n\n\n\ncontactInfo\n\ncontactInfo\n\n\n\nMembers--contactInfo\n\n\n\n\nBelongs\n\nBelongs\n\n\n\nMembers--Belongs\n\n1\n\n\n\nMakes\n\nMakes\n\n\n\nMembers--Makes\n\n1\n\n\n\nAttends\n\nAttends\n\n\n\nMembers--Attends\n\nm\n\n\n\nMembershipType\n\nMembershipType\n\n\n\ntypeID\n\ntypeID\n\n\n\nMembershipType--typeID\n\n\n\n\ntypeName\n\ntypeName\n\n\n\nMembershipType--typeName\n\n\n\n\nmonthlyFee\n\nmonthlyFee\n\n\n\nMembershipType--monthlyFee\n\n\n\n\nPayments\n\nPayments\n\n\n\npaymentID\n\npaymentID\n\n\n\nPayments--paymentID\n\n\n\n\namount\n\namount\n\n\n\nPayments--amount\n\n\n\n\npaymentDate\n\npaymentDate\n\n\n\nPayments--paymentDate\n\n\n\n\nEvents\n\nEvents\n\n\n\neventID\n\neventID\n\n\n\nEvents--eventID\n\n\n\n\neventName\n\neventName\n\n\n\nEvents--eventName\n\n\n\n\neventDate\n\neventDate\n\n\n\nEvents--eventDate\n\n\n\n\nOrganizes\n\nOrganizes\n\n\n\nEvents--Organizes\n\n1\n\n\n\nWorker\n\nWorker\n\n\n\nworkerID\n\nworkerID\n\n\n\nWorker--workerID\n\n\n\n\nworkerName\n\nworkerName\n\n\n\nWorker--workerName\n\n\n\n\nrole\n\nrole\n\n\n\nWorker--role\n\n\n\n\nBelongs--MembershipType\n\nm\n\n\n\nMakes--Payments\n\nm\n\n\n\nAttends--Events\n\nm\n\n\n\nOrganizes--Worker\n\nm\n\n\n\n\n\n\n\n\n\n\nCrows Foot diagram\n\n\n\n\n\nerDiagram\n    MEMBERS {\n        int memberID\n        string name\n        string contactInfo\n    }\n    MEMBERSHIP_TYPE {\n        int typeID\n        string typeName\n        float monthlyFee\n    }\n    PAYMENTS {\n        int paymentID\n        float amount\n        date paymentDate\n    }\n    EVENTS {\n        int eventID\n        string eventName\n        date eventDate\n    }\n    WORKER {\n        int workerID\n        string workerName\n        string role\n    }\n\n\n    MEMBERSHIP_TYPE ||--o{ MEMBERS : \"has\"\n    MEMBERS ||--o{ PAYMENTS : \"makes\"\n    MEMBERS o{--o{ EVENTS : \"attends\"\n    WORKER ||--o{ EVENTS : \"organizes\""
+  },
+  {
+    "objectID": "deliverable-5.html#relational-schemas",
+    "href": "deliverable-5.html#relational-schemas",
+    "title": "Design Document - Deliverable 5",
+    "section": "Relational schemas",
+    "text": "Relational schemas\nMEMBERS( member_id INT PRIMARY KEY AUTO_INCREMENT, – Unique identifier for each member first_name VARCHAR(50) NOT NULL, – Member’s first name; up to 50 characters last_name VARCHAR(50) NOT NULL, – Member’s last name; up to 50 characters contact_info VARCHAR(100), – Contact details (email/phone), optional length up to 100 characters membership_type_id INT NOT NULL, – Reference to the type of membership CONSTRAINT fk_membership_type FOREIGN KEY (membership_type_id) REFERENCES MEMBERSHIP_TYPE(type_id) )\nMEMBERSHIP_TYPE( type_id INT PRIMARY KEY AUTO_INCREMENT, – Unique identifier for each membership type type_name VARCHAR(50) NOT NULL, – Name of the membership type (e.g., Standard, Premium) monthly_fee DECIMAL(10,2) NOT NULL – Monthly fee (must be positive; two decimal places) )\nPAYMENTS( payment_id INT PRIMARY KEY AUTO_INCREMENT, – Unique identifier for each payment transaction member_id INT NOT NULL, – Foreign key linking to the member who made the payment amount DECIMAL(10,2) NOT NULL CHECK (amount &gt; 0), – Payment amount; must be positive payment_date DATE NOT NULL, – Date of payment payment_method VARCHAR(20), – Method of payment (e.g., credit card, cash) description VARCHAR(255), – Optional details about the payment CONSTRAINT fk_payment_member FOREIGN KEY (member_id) REFERENCES MEMBERS(member_id) )\nEVENTS( event_id INT PRIMARY KEY AUTO_INCREMENT, – Unique event identifier event_name VARCHAR(100) NOT NULL, – Name of the event/activity event_date DATE NOT NULL, – Date (or datetime) when the event occurs organizer_id INT NOT NULL, – Reference to the Worker organizing the event CONSTRAINT fk_event_organizer FOREIGN KEY (organizer_id) REFERENCES WORKER(worker_id) )\nWORKER( worker_id INT PRIMARY KEY AUTO_INCREMENT, – Unique identifier for each club worker/employee worker_name VARCHAR(50) NOT NULL, – Full name of the worker role VARCHAR(50) NOT NULL, – Role or job title (e.g., Manager, Coach) contact_info VARCHAR(100) – Worker’s contact details )\nEVENT_ATTENDANCE( member_id INT NOT NULL, – Reference to the member attending the event event_id INT NOT NULL, – Reference to the event attended PRIMARY KEY (member_id, event_id), – Composite primary key ensures each member-event pair is unique CONSTRAINT fk_attendance_member FOREIGN KEY (member_id) REFERENCES MEMBERS(member_id), CONSTRAINT fk_attendance_event FOREIGN KEY (event_id) REFERENCES EVENTS(event_id) )"
+  },
+  {
+    "objectID": "deliverable-5.html#functional-dependencies-and-normalization",
+    "href": "deliverable-5.html#functional-dependencies-and-normalization",
+    "title": "Design Document - Deliverable 5",
+    "section": "Functional Dependencies and Normalization",
+    "text": "Functional Dependencies and Normalization\nMEMBERS\nmember_id → {first_name, last_name, contact_info, membership_type_id} A member’s ID uniquely determines their first name, last name, contact information, and membership type. membership_type_id → {membership_type_name, monthly_fee} A specific membership type ID determines the membership type name and monthly fee. MEMBERSHIP_TYPE\ntype_id → {type_name, monthly_fee} The membership type ID uniquely determines the membership type name and monthly fee. PAYMENTS\npayment_id → {member_id, amount, payment_date, payment_method, description} A payment ID uniquely determines the associated member, amount, payment date, method, and description. member_id → {payment_id, amount, payment_date, payment_method, description} A member can have multiple payments, but each payment corresponds to a unique ID. EVENTS\nevent_id → {event_name, event_date, organizer_id} The event ID uniquely determines the event’s name, date, and the organizer’s ID. WORKER\nworker_id → {worker_name, role, contact_info} The worker ID uniquely determines the worker’s name, role, and contact information. EVENT_ATTENDANCE\n(member_id, event_id) → {member_id, event_id} A unique pair of member ID and event ID determines attendance.\nNormalization helps achieve an efficient database design. The most common normal forms are:\nFirst Normal Form (1NF): Ensures that each table has atomic (indivisible) values, and each record is unique.\nAll the tables in the schema already satisfy 1NF, as they have no repeating groups or arrays. Second Normal Form (2NF): In addition to 1NF, all non-key attributes must fully depend on the entire primary key.\nThe schema already satisfies 2NF. For instance, in the PAYMENTS table, the non-key attributes (amount, payment_date, etc.) depend entirely on payment_id. Third Normal Form (3NF): Ensures that all attributes are directly dependent on the primary key and not on other non-key attributes (i.e., no transitive dependencies).\nThe schema satisfies 3NF. For example, in the MEMBERSHIP_TYPE table, the monthly_fee directly depends on type_id, and there are no other transitive dependencies. Boyce-Codd Normal Form (BCNF): A stricter version of 3NF, where every determinant is a candidate key.\nThe schema is in BCNF, as all the functional dependencies involve candidate keys. For example, member_id is the candidate key in MEMBERS, and all attributes depend on it. Fourth Normal Form (4NF): Eliminates multi-valued dependencies, ensuring that each non-key attribute depends on the key and not on any other non-key attribute.\nThe schema is in 4NF. There are no multi-valued dependencies present, as no attributes in any table depend on other non-key attributes."
+  },
+  {
+    "objectID": "deliverable-5.html#specific-queries",
+    "href": "deliverable-5.html#specific-queries",
+    "title": "Design Document - Deliverable 5",
+    "section": "Specific queries",
+    "text": "Specific queries\nList all members and their membership types. Relational Algebra: πfirst_name,last_name,type_name(MEMBERS⋈MEMBERSHIP_TYPE)\nFind the total payment amount for each member. Relational Algebra: γmember_id,SUM(amount)(PAYMENTS)\nRetrieve the payment history of a specific member (e.g., member_id = 1). Relational Algebra: σmember_id=1(PAYMENTS)\nList all events scheduled for a specific date (e.g., event_date = ‘2025-03-01’). Relational Algebra: σevent_date=′2025−03−01′(EVENTS)\nFind all members who attended a specific event (e.g., event_id = 5). Relational Algebra: πfirst_name,last_name(σevent_id=5(EVENT_ATTENDANCE⋈MEMBERS))\nGet a list of all workers and their roles. Relational Algebra: πworker_name,role(WORKER)\nRetrieve the details of members who have made payments in the last month. Relational Algebra: σpayment_date&gt;CURRENT_DATE−30(PAYMENTS⋈MEMBERS)\nGet the total number of members per membership type. Relational Algebra: γmembership_type_id,COUNT(member_id)(MEMBERS)\nRetrieve the names of all events organized by a specific worker (e.g., worker_id = 2). Relational Algebra: πevent_name(σorganizer_id=2(EVENTS))\nFind the most expensive membership type based on the monthly fee. Relational Algebra: πtype_name,monthly_fee(σmonthly_fee=MAX(monthly_fee)(MEMBERSHIP_TYPE))\nList all events that a specific member (e.g., member_id = 3) has attended. Relational Algebra: πevent_name(σmember_id=3(EVENT_ATTENDANCE⋈EVENTS))\nRetrieve all members who have attended more than 5 events. Relational Algebra: γmember_id,COUNT(event_id)(EVENT_ATTENDANCE)HAVING COUNT(event_id) &gt; 5\nGet a list of all members who have a ‘Premium’ membership. Relational Algebra: πfirst_name,last_name(σtype_name=′Premium′(MEMBERS⋈MEMBERSHIP_TYPE))\nList all payments made using a specific payment method (e.g., ‘credit card’). Relational Algebra: σpayment_method=′creditcard′(PAYMENTS)\nFind the total number of events organized by each worker. Relational Algebra: γorganizer_id,COUNT(event_id)(EVENTS)\nFind all members who have not made any payments in the last year. Relational Algebra: πfirst_name,last_name(σpayment_date&lt;CURRENT_DATE−365(MEMBERS−PAYMENTS))\nRetrieve all workers who have a ‘Manager’ role. Relational Algebra: σrole=′Manager′(WORKER)\nGet a list of all events that are free of charge (no payments recorded). Relational Algebra: πevent_name(σpayment_id=NULL(EVENTS⋈PAYMENTS))\nFind the total amount of payments made by a specific member (e.g., member_id = 2). Relational Algebra: γSUM(amount)(σ member_id=2(PAYMENTS))\nRetrieve all members who attended events in a specific month (e.g., ‘2025-03’). Relational Algebra: _{ , ‘2025-03%’} ( )"
+  },
+  {
+    "objectID": "deliverable-5.html#sample-data",
+    "href": "deliverable-5.html#sample-data",
+    "title": "Design Document - Deliverable 5",
+    "section": "Sample Data",
+    "text": "Sample Data\n\nStudent table\nBelow is the sample data:\n\n\nMEMBERS Table\n\n\n\n\n\n\n\n\n\n\nmember_id\nfirst_name\nlast_name\ncontact_info\nmembership_type_id\n\n\n\n\n1\nJohn\nDoe\njohn@example.com\n1\n\n\n2\nJane\nSmith\njane@example.com\n2\n\n\n3\nAisha\nHassan\naisha@example.com\n1\n\n\n4\nKenji\nTakahashi\nkenji@example.com\n3\n\n\n5\nLeila\nNguyen\nleila@example.com\n2\n\n\n\n\n\nMEMBERSHIP_TYPE Table\n\n\n\ntype_id\ntype_name\nmonthly_fee\n\n\n\n\n1\nStandard\n50.00\n\n\n2\nPremium\n100.00\n\n\n3\nVIP\n150.00\n\n\n\n\n\nPAYMENTS Table\n\n\n\n\n\n\n\n\n\n\n\npayment_id\nmember_id\namount\npayment_date\npayment_method\ndescription\n\n\n\n\n1\n1\n50.00\n2025-02-01\nCredit Card\nMonthly payment\n\n\n2\n2\n100.00\n2025-02-10\nCash\nMonthly payment\n\n\n3\n3\n50.00\n2025-02-05\nCredit Card\nMonthly payment\n\n\n4\n4\n150.00\n2025-02-15\nCredit Card\nMonthly payment\n\n\n\n\n\nEVENTS Table\n\n\n\nevent_id\nevent_name\nevent_date\norganizer_id\n\n\n\n\n1\nYoga Class\n2025-03-01\n1\n\n\n2\nGolf Tournament\n2025-03-05\n2\n\n\n3\nSwimming Competition\n2025-03-07\n3\n\n\n4\nWine Tasting\n2025-03-10\n4\n\n\n\n\n\nWORKER Table\n\n\n\nworker_id\nworker_name\nrole\ncontact_info\n\n\n\n\n1\nAnna\nTrainer\nanna@example.com\n\n\n2\nMark\nCoach\nmark@example.com\n\n\n3\nSara\nEvent Planner\nsara@example.com\n\n\n4\nTom\nManager\ntom@example.com\n\n\n\n\n\nEVENT_ATTENDANCE Table\n\n\n\nmember_id\nevent_id\n\n\n\n\n1\n1\n\n\n2\n2\n\n\n3\n3\n\n\n4\n4"
+  },
+  {
+    "objectID": "deliverable-5.html#project-management",
+    "href": "deliverable-5.html#project-management",
+    "title": "Design Document - Deliverable 5",
+    "section": "Project Management",
+    "text": "Project Management\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTask\nMar 2\nMar 5\nMar 10\nMar 13\nMar 21\nMar 28\nApr 5\nApr 10\nApr 16\nApr 23\nApr 29\n\n\n\n\n1. Initial Planning & Requirements\n███\n\n\n\n\n\n\n\n\n\n\n\n\n2. Design Phase\n\n███\n\n\n\n\n\n\n\n\n\n\n\n3. Setup Database Environment\n\n\n███\n\n\n\n\n\n\n\n\n\n\n4. Data Modeling and Development\n\n\n\n███\n\n\n\n\n\n\n\n\n\n5. Backend Development\n\n\n\n\n███\n\n\n\n\n\n\n\n\n6. Testing & QA\n\n\n\n\n\n███\n\n\n\n\n\n\n\n7. Report Draft\n\n\n\n\n\n\n███\n\n\n\n\n\n\n8. Finalizing Database & User Test\n\n\n\n\n\n\n\n███\n\n\n\n\n\n9. Final Report Writing\n\n\n\n\n\n\n\n\n███\n\n\n\n\n10. Final Review & Submission\n\n\n\n\n\n\n\n\n\n███\n███"
+  },
+  {
+    "objectID": "deliverable-4.html",
+    "href": "deliverable-4.html",
+    "title": "Video Pitch - Deliverable 4",
+    "section": "",
+    "text": "[Link to repository]"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Project documentation",
+    "section": "",
+    "text": "(Write this QMD as if you are leaving breadcrumbs for next semesters students in CMSC 408.)\n(provide an overview of the project?)\nDeliverable 4 contains our original video pitch.\nDeliverable 5 is our design document.\nDeliverable 7 is the final project report\n(what is the name of your team? why did you pick it?)\n(feel free to make this really, really pretty!)"
+  },
+  {
+    "objectID": "deliverable-7.html",
+    "href": "deliverable-7.html",
+    "title": "Implementation - Deliverable 7",
+    "section": "",
+    "text": "(brief 2-3 sentence description of this document and this project.)\n\n[Link to repository]\n[Direct link to video pitch]\n[Direct link to design video]\n[Direct link to implementation video]\n\n\nDesign video\nembed a 4-5 minute video presentation summarize your implemention, how it went, how you design might have needed to be modified during implementation, and your reflections on the overall process.\nDEMONSTRATE your working implementation.\n\n\nWeb interface design\nYour report should explain how you implemented the web interface. What tools did you use? Why?\n\n\nScreenshots\nFor each of the major screens in your program, provide an image and an explanation of what the screen does or how it supports the user interface.\n\n\nReports\nYour web site should contain a Reports page with 20 queries selectable from a menu. Each report should run.\n\n\nFuture considerations\nWhat needs to be done next to take your project to the next level? If you had more time, what would you do next?\n\n\nReflections on the overall project\nHow did the project go? Did you achieve what you originally intended to build? If not, what kept you from achieving it?\nYour report should touch on all the elements discussed in the project description. You can certainly refer to sections of previous reports.\nThis document should be STAND-ALONE. That is, you shouldn’t need to refer to other documents to get your points across.\nSee: https://virginiacommonwealth.instructure.com/courses/113813/assignments/1075774\n\n\nReflection\n\nHow was your overall experience with this semester-long project?\n\n\n\nHow did the homeworks and discussions prepare you (or not) for successful completion of this project?\n\n\n\nWhat advice would you give to students working on this project in the future?"
+  },
+  {
+    "objectID": "deliverable-4.html#problem-domain",
+    "href": "deliverable-4.html#problem-domain",
+    "title": "Video Pitch - Deliverable 4",
+    "section": "Problem Domain",
+    "text": "Problem Domain\nA country club offers memberships to many different individuals who utilize the various different facilities and services offered. Club members pay monthly fees for their individual memberships and also may pay for other services and activities offered by the club. A database to manage the country club memberships would track various details of each member including names, contact information, membership status, membership type, payment history, attendance records, etc. The database would enable the club to maintain up to date and accurate member records from billing, activity tracking, and personal information reducing any errors."
+  },
+  {
+    "objectID": "deliverable-4.html#need",
+    "href": "deliverable-4.html#need",
+    "title": "Video Pitch - Deliverable 4",
+    "section": "Need",
+    "text": "Need\nThe database is important to efficiently maintain the membership, as it safely stores member information type of membership, membership payment history and billing, it helps keep track of events in which the country club has, and what member and type of membership access allows for attendance to the event - Allows for personalized tracking of members preferred activities, easier to cater to them on an individual basis (Transaction is easier). Up to date contact information is also a big issue so storing the recent information of members is a problem that the database eliminates (doing so of course in a secure manner.)"
+  },
+  {
+    "objectID": "deliverable-4.html#context-scope-perspective",
+    "href": "deliverable-4.html#context-scope-perspective",
+    "title": "Video Pitch - Deliverable 4",
+    "section": "Context, Scope, Perspective",
+    "text": "Context, Scope, Perspective\nThe DB is for Country Club Members and Country Club Owners.\nCountry Club Members will receive additional expectations for their arrival and the duration of their stay due to these features. With isolated data used from purchase history while at the club for example, We will make it easier than ever before for more people to be treated with the expectation of their arrival. Such as the results of an increase in marketing for a simple item or rather the time and duration of their stay to even result in specific lightings and patterns for that viewer to create an anticipated ‘entrance’ over time. For Country Club owners, Business owners can creatively use our tool to generate any data or statistics related to any Country club member.\nThis data base also functions upon real time management and operations of the business. The database is for the management team of the Country club. A key feature of the database is for the coach in the domain of a sports team as the club manager has to provide access to the database to all country club employees and they can update, add, and delete things in and out of the database.\nData retrieval is also given to specific department manager so they can easily access the information and relay it to their team.\nI couldn’t find any apps too similar to ours based upon a search with Chatgpt."
+  },
+  {
+    "objectID": "deliverable-4.html#motivation",
+    "href": "deliverable-4.html#motivation",
+    "title": "Video Pitch - Deliverable 4",
+    "section": "Motivation",
+    "text": "Motivation\nOur team selected this problem domain because it was designed around a useful scenario, our team members had former experience in the subject matter, and it could have real application due to its simplicity and usefulness. Operations derived from this database can be as complex as useful for any of the business’s needs with the data despite the initial appearance in the database design. By making the foundation of this data base revolving around a simple collection of data and the complex operations which can be creatively configured from that data. We chose this database due to KC proposing the idea. We can have a database that keeps track of members of a country club- we can account for their monthly club membership fee, times they attend the club a month etc."
+  },
+  {
+    "objectID": "deliverable-5.html#member-role",
+    "href": "deliverable-5.html#member-role",
+    "title": "Design Document - Deliverable 5",
+    "section": "Member Role:",
+    "text": "Member Role:\nPersonal Information Management Payment Information and History Event and Activity Tracking Bookings and Reservations ## Worker Role: Administrative Access for Member Management Event and Activity Management Monitoring Payments and Providing Member Assistance Personal Account Management for Workers"
+  },
+  {
+    "objectID": "deliverable-5.html#worker-role",
+    "href": "deliverable-5.html#worker-role",
+    "title": "Design Document - Deliverable 5",
+    "section": "Worker Role:",
+    "text": "Worker Role:\n\nAdministrative Access for Member Management\nEvent and Activity Management\nMonitoring Payments and Providing Member Assistance\nPersonal Account Management for Workers"
+  },
+  {
+    "objectID": "deliverable-5.html#authentication-and-access-control-1",
+    "href": "deliverable-5.html#authentication-and-access-control-1",
+    "title": "Design Document - Deliverable 5",
+    "section": "Authentication and Access Control",
+    "text": "Authentication and Access Control\nRole-based access control (RBAC) ensures users can only access relevant parts of the system based on their role (Member or Worker). Multi-factor authentication (MFA) may be implemented for higher privilege operations. ## Encryption Data at rest and in transit will be encrypted using AES encryption to secure sensitive member data."
+  },
+  {
+    "objectID": "deliverable-5.html#encryption",
+    "href": "deliverable-5.html#encryption",
+    "title": "Design Document - Deliverable 5",
+    "section": "Encryption",
+    "text": "Encryption\n\nData at rest and in transit will be encrypted using AES encryption to secure sensitive member data."
+  },
+  {
+    "objectID": "deliverable-5.html#ethical-data-handling",
+    "href": "deliverable-5.html#ethical-data-handling",
+    "title": "Design Document - Deliverable 5",
+    "section": "Ethical Data Handling",
+    "text": "Ethical Data Handling\nClear communication with members regarding the collection and usage of their data, ensuring consent is obtained before storing sensitive information. ## Legal Compliance The database will adhere to data protection laws such as: CCPA (California Consumer Privacy Act) for users in California. HIPAA (Health Insurance Portability and Accountability Act) if health-related data is stored. PCI-DSS standards for payment processing. ## Transparency & Accountability Regular audits will be performed to ensure proper handling and access of sensitive data. # Ethical Considerations ## Data Bias & Fairness The database design ensures equal access to all members and workers, minimizing bias in data storage and retrieval. ## Data Ownership Members retain ownership of their personal data, and their consent is required for the storage and use of such information. The system provides detailed documentation for users and administrators to understand how to interact with the platform securely and efficiently."
+  },
+  {
+    "objectID": "deliverable-5.html#legal-compliance",
+    "href": "deliverable-5.html#legal-compliance",
+    "title": "Design Document - Deliverable 5",
+    "section": "Legal Compliance",
+    "text": "Legal Compliance\n\nThe database will adhere to data protection laws such as:\n\nCCPA (California Consumer Privacy Act) for users in California.\nHIPAA (Health Insurance Portability and Accountability Act) if health-related data is stored.\nPCI-DSS standards for payment processing."
+  },
+  {
+    "objectID": "deliverable-5.html#transparency-accountability",
+    "href": "deliverable-5.html#transparency-accountability",
+    "title": "Design Document - Deliverable 5",
+    "section": "Transparency & Accountability",
+    "text": "Transparency & Accountability\n\nRegular audits will be performed to ensure proper handling and access of sensitive data."
+  },
+  {
+    "objectID": "deliverable-5.html#data-bias-fairness",
+    "href": "deliverable-5.html#data-bias-fairness",
+    "title": "Design Document - Deliverable 5",
+    "section": "Data Bias & Fairness",
+    "text": "Data Bias & Fairness\n\nThe database design ensures equal access to all members and workers, minimizing bias in data storage and retrieval."
+  },
+  {
+    "objectID": "deliverable-5.html#data-ownership",
+    "href": "deliverable-5.html#data-ownership",
+    "title": "Design Document - Deliverable 5",
+    "section": "Data Ownership",
+    "text": "Data Ownership\n\nMembers retain ownership of their personal data, and their consent is required for the storage and use of such information.\n\nThe system provides detailed documentation for users and administrators to understand how to interact with the platform securely and efficiently."
+  }
+]

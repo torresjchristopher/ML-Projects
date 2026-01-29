@@ -1,0 +1,16 @@
+project:
+    type: default
+
+date: 03 - 09 - 25
+
+author:
+    - name: Christopher Torres
+      email: Torresc6@vcu.edu
+
+format:
+    html:
+        embed-resources: true
+        html-math-method: katex
+        theme: spacelab
+        toc: true
+

@@ -1,0 +1,212 @@
+---
+Title: Homework 1 - Open Source Tools
+
+
+Author:
+
+    - Name: Christopher Torres
+      Email: Torresc6@vcu.edu
+
+
+Date: 1 - 26 - 25
+
+---
+
+# Brief intro: 
+Author Alireza Sadeghi writes an exploration of the open-source data engineering landscape as of 2024, highlighting the latest tools, trends, and innovations across various categories of the data engineering lifecycle. He stresses the importance of this report compared to typically annually released roports, highlighting the fact that this report is to focus specifically on open-source tools within the data engineering ecosystem, distinguishing it from broader reports like the MAD Landscape, State of Data Engineering, or the Reppoint Open Source Top 25.
+
+ The article also focuses on open-source solutions, emphasizing their growing role in addressing the challenges of modern data platforms.
+
+
+He offers a nice overview of the what is needed in order to: 
+
+a. Highlight the rapid evolution of the data engineering landscape and the critical role of open-source tools in addressing modern challenges.
+
+b. Apply clear criteria to select active, relevant, and promising open-source tools specific to the data engineering lifecycle, excluding inactive, retired, or unrelated projects.
+
+c. Provide a focused, practical guide to help data engineers navigate the open-source ecosystem and make informed decisions for building and managing data platforms.
+
+![OSS Data Engineering Landscape 2024](/assets/my_image.png)
+
+# Major Categories
+
+
+
+
+Mr. Sadeghi proposals nine major tools categories.
+
+
+
+
+
+## Storage Systems
+
+
+
+Storage systems are foundational components in data engineering that handle
+the storage and retrieval of data. These systems can include traditional
+databases, distributed storage solutions, and modern cloud-based storage 
+options. They provide scalable, reliable, and secure environments to store 
+structured, semi-structured, and unstructured data, ensuring data is
+accessible for processing, analysis, and other operations.
+
+
+
+## Data Lake Platform
+
+
+
+Data Lake platforms are designed to store vast amounts of raw data in its native 
+format until it is needed. Unlike traditional databases, data lakes can store structured, 
+semi-structured, and unstructured data, providing a flexible and scalable storage solution. 
+These platforms support the integration of multiple data sources, making it easier to perform 
+big data analytics and machine learning on large datasets.
+
+
+
+## Data Integration
+
+
+In 2023, established tools like Apache Nifi, Airbyte, and Meltano retained their stronghold in data integration, while emerging options like Apache Inlong and Apache SeaTunnel offered new capabilities. Streaming CDC tools, especially within the Kafka ecosystem (e.g., Kafka Connect and Debezium), saw significant advancements, with Flink CDC Connectors gaining momentum for stream processing. API integration tools like CloudQuery and Streampipe grew in prominence, catering to cloud services. Apache Kafka maintained its dominance in event and messaging middleware, but challengers like Redpanda, fueled by substantial funding, are narrowing the gap.
+
+
+
+
+## Data Processing and Computation
+
+
+
+Apache Spark and Apache Flink continued to lead in stream processing, with Flink drawing attention through Flink-as-a-service offerings from major providers like AWS and Confluent (post-Immerok acquisition). In the Python ecosystem, libraries like Vaex, Dask, Polars, and Ray enabled parallel data processing and analysis of large datasets within Python's framework.
+
+
+## Workflow and DataOps
+
+
+
+
+Workflow orchestration remained highly competitive, with established tools like Apache Airflow and Dagster thriving amid debates about bundling strategies. Newcomers such as Kestra, Temporal, Mage, and Windmill gained traction, offering features like serverless orchestration and distributed task execution, catering to evolving data pipeline needs.
+
+
+
+## Data Infrastructure and Monitoring
+
+
+
+
+Grafana, Prometheus, and the ELK stack continued to dominate observability, with Grafana Labs expanding its offerings through tools like Loki (log aggregation) and Mimir (Prometheus storage). Open-source cluster management saw a decline due to cloud migration, with tools like Apache Ambari experiencing uncertain futures despite recent revival attempts. Kubernetes emerged as the go-to resource scheduler for cloud platforms.
+
+## ML/AI Platform
+
+
+
+Machine learning platforms saw rapid growth in 2023, driven by the rising popularity of vector databases, which are optimized for managing high-dimensional data and were identified as the fastest-growing database category by DB-Engines. MLOps tools became critical for efficiently scaling ML projects, focusing on streamlining the development, deployment, and lifecycle management of models to address the increasing complexity of ML systems.
+
+
+
+## Metadata Management
+
+
+
+
+Metadata management gained importance as organizations recognized the need for better governance and access to data. In response to a lack of comprehensive solutions, companies like Netflix, Lyft, Airbnb, and LinkedIn developed their own open-source tools, such as Amundsen, DataHub, and Marquez. These tools are now actively maintained and contribute to the ecosystem. However, schema management remains stagnant, with Hive Metastore remaining the dominant solution in the absence of viable open-source alternatives.
+
+
+
+
+
+## Analytics and Visualization
+
+
+
+
+Apache Superset emerged as a leading open-source alternative to proprietary BI tools, gaining widespread adoption. Although some experts claim "big data is dead," distributed MPP (Massively Parallel Processing) engines like Apache Hive, Impala, Presto, and Trino remain critical for handling petabyte-scale datasets in large enterprises. Uniform execution engines, such as Apache Linkis, Alluxio, and Cube, are also gaining popularity, offering middleware solutions for seamless querying and computation across diverse data systems.
+
+
+
+# Digging into the details
+
+
+
+In the following sections I identify three subcategories of data engineering tools of greatest interest to me.
+
+## Vector Databases
+
+
+A vector database is a specialized system designed to store, manage, and retrieve high-dimensional data represented as vectors. Unlike traditional databases that handle structured data, vector databases excel at capturing the semantic meaning and relationships within unstructured data, such as text, images, and audio. This capability makes them particularly valuable in applications like natural language processing, image recognition, and recommendation systems. 
+
+Link to learn more: https://www.cloudflare.com/learning/ai/what-is-vector-database/ 
+
+### Approximate Nearest Neighbor (ANN) Search Algorithms
+
+ANN algorithms are designed to quickly identify data points that are close to a given query point in high-dimensional space. They trade off exact precision for speed, making them suitable for large-scale applications where real-time responses are critical. Techniques like Locality-Sensitive Hashing (LSH) and Hierarchical Navigable Small World (HNSW) graphs are commonly used in ANN searches.
+
+Functionality: ANN search algorithms power vector databases by enabling efficient querying of high-dimensional data. They approximate the nearest neighbor searches instead of exact matches, which is critical for large-scale datasets (e.g., image or text embeddings).
+
+Importance: Their efficiency is crucial for applications like recommendation systems, semantic search, and AI-driven personalization. These algorithms allow databases to process queries in sub-linear time, making real-time retrieval feasible.
+
+Why It Differs from Relational OLTP Databases: Traditional OLTP databases rely on exact matching and structured query models, while ANN focuses on high-dimensional, unstructured data.
+
+Interest: I am interested in the evolution of ANN techniques like HNSW and FAISS. Both of these open up new possibilities for scaling AI systems and I am interested in learning more about them.
+
+Link to learn more: https://towardsdatascience.com/comprehensive-guide-to-approximate-nearest-neighbors-algorithms-8b94f057d6b6 
+
+
+### Indexing Techniques for High-Dimensional Data
+
+
+Efficient indexing is crucial for the performance of vector databases. Advanced indexing methods, such as KD-trees, R-trees, and VP-trees, help organize high-dimensional data to facilitate rapid similarity searches. These structures reduce the search space and improve query performance by grouping similar vectors together. 
+
+
+Functionality: Indexing structures like KD-Trees, Ball Trees, and Product Quantization are used to store and access vectors efficiently. These structures optimize search times by organizing data spatially or hierarchically.
+
+Importance: Effective indexing reduces latency and ensures scalability when handling massive volumes of vector data.
+
+Why It Differs from Relational OLTP Databases: Relational databases rely on B-Trees and Hash Indexing for fixed schema and numeric data, whereas vector indexing focuses on multidimensional spaces.
+
+Interest: I am interested in ing into hybrid indexing methods. Neural networks combining with traditional approaches is rapidly advancing in the field and I want to learn more about Vector Databases overall. 
+
+Link to learn more: https://www.analyticsvidhya.com/blog/2024/07/indexing-algorithms-in-vector-databases/
+
+
+### Vector Database Use Cases in AI and ML
+
+Vector databases play a pivotal role in AI and ML applications by enabling the storage and retrieval of vector embeddings generated by models. This functionality supports tasks like semantic search, where the goal is to find data points with similar meanings, and recommendation systems that suggest items based on user preferences encoded as vectors.
+
+
+Functionality: Vector databases are specialized for storing embeddings generated by machine learning models, enabling applications such as semantic search, facial recognition, and anomaly detection.
+
+
+Importance: Their ability to handle unstructured, high-dimensional data makes them indispensable in AI/ML pipelines.
+
+
+Why It Differs from Relational OLTP Databases: While OLTP systems support transactional workloads with structured schemas, vector databases prioritize similarity searches over rigid constraints.
+
+
+Interest: I am interested in exploring real-world deployments, like OpenAI’s use of vector databases for embedding storage in GPT models. These methods reveals how companies like ChatGPT are shaping the AI industry. I am interested in LLMs and the direction LLMs are headed. 
+
+Link to learn more: 
+
+https://medium.com/@mahalakshmi1117/vector-databases-in-action-real-world-use-cases-and-benefits-549c395794a8
+
+
+# README
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+
+
+# Reflection
+
+
+
+I liked about this project how it taught me to use the tools I will be required to be familiar with to have a successful semester and to utilize in my project. This makes me feel more empowered to realize my database design instead of stressing about the means to submit or convey it. To that end, this homework was incredibly helpful and succesful! It took away a lot of the pressure I would have been stressing about if I had to worry about the technical aspects of submission. By separating the two as not being one and the same, I am more confident about my success in this course. I am grateful the first submission was merely submitting a text report through the tools instead of to Canvas!
+
+
+I found hardest about this assignment was just getting familiar with Quarto. VSCode is easy enough. I barely figured out how to get to Quarto Preview and I still don't know how to use GIT. I set my user name and email and tried to use the GITHUB extension in VSCode and nothing worked. I am still manaually pushing everything to GitHub. I might come to office hours to address this next week if it continues as I am sure it will get more laborous. 
+
+
+
+I found most exciting about this project the knowledge I learned about the databases and about my research topic of Vector Databases. I thought it was a fun way to learn and to get familiar with submission of a report like this. 
+
+I would approach this project differently next time by just making sure I was all set up. I would attend office hours if I was having difficulty with GIT, Quarto, or whatever else because then I could have came to the project absolutely prepared and ready to focus on the content. This would make sure I was set up properly and it would also probably have provided insights into the assignment. 

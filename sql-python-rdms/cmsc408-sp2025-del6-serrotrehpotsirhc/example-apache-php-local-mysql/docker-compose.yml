@@ -1,0 +1,47 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker-apache-php
+    container_name: apache-php-container
+    ports:
+      - "8080:80" # Map port 8080 on the host to port 80 in the container
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=${DOCKER_DB_USER}
+      - MYSQL_PASSWORD=${DOCKER_DB_PASS}
+      - MYSQL_DATABASE=${DOCKER_DB_DBNAME}
+    volumes:
+      - ./site:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DOCKER_DB_USER}
+      MYSQL_PASSWORD: ${DOCKER_DB_PASS}
+      MYSQL_DATABASE: ${DOCKER_DB_DBNAME}
+    ports:
+      - "3306:3306" # MySQL port
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d # Mount the folder containing SQL files
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    restart: always
+    ports:
+      - "8081:80" # Expose phpMyAdmin on port 8081
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD} # For access to phpMyAdmin
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:

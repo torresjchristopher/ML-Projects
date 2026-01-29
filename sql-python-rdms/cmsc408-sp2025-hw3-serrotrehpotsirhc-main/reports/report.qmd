@@ -1,0 +1,595 @@
+---
+title: Homework 3
+date: 2 / 16 / 2025
+author:
+    - name: Christopher Torres
+      email: torresc6@vcu.edu
+---
+
+Link to my GITHUB Repo: <https://github.com/cmsc-vcu/cmsc408-sp2025-hw3-serrotrehpotsirhc>
+
+
+
+# Introduction
+
+
+In this project, we explore Entity-Relationship (ER) modeling by analyzing three real-world database scenarios: a University Course Enrollment System, a Hospital Patient Management System, and a Movie Theater Booking System.
+
+The objective is to define entities, attributes, and relationships for each scenario, visually represent them using Chen’s Notation and Crow’s Foot Notation, and translate them into relational schemas. 
+
+These steps reflect the progression from conceptual design to logical database structuring, which is a critical process in database development.
+
+I will also be describing design choices for each, following the Sports Tournament Management System model provided. 
+
+Beyond diagramming, this project also emphasizes design choices related to normalization, cardinality, and relationship modeling. 
+
+Homework 3 will provide us more experience using Graphiz and Mermaid, as well as allowing us to begin to understand how to realize conceptual models in ER modelling and beyond! Homework 3 continues to get us familiar with these databases tools and lets us use our skills on our own examples this time.
+
+
+Technologies Used
+
+- **Graphviz** for Chen's Notation  
+- **Mermaid** for Crow’s Foot Notation 
+
+
+
+# Models
+
+Below are three entity-relation models for systems in the world around me.
+
+
+
+
+
+## Model 1 - University Course Enrollment System
+
+Consider a university that wants to manage students, courses, and professors. Each student has a student ID, name, and major. Courses have a course ID, title, and credit hours. Professors have a professor ID, name, and department. A student can enroll in multiple courses, and each course can have multiple students. A professor can teach multiple courses, but each course is taught by a single professor.
+
+Entities:
+
+1. Students
+2. Courses
+3. Professors
+
+Schema:
+
+1. Each student has: a student ID, name, and major.
+2. Each course has: a course ID, title, and credit hours.
+3. Each professor has: a professor ID, name, and department.
+
+Cardinality:
+
+1. A student can enroll in multiple courses, and each course can have multiple students.
+
+2. A professor can teach multiple courses, but each course is taught by a single professor.
+
+### Design choices
+
+Why These Entities?
+
+1. Student → Central to any university enrollment system.
+
+2. Course → The core offering students enroll in.
+
+3. Professor → Faculty members who teach courses.
+
+
+Why These Cardinalities:
+
+1. Students to Courses (Many-to-Many):
+
+A student can enroll in multiple courses, and a course can have multiple students.
+
+2. Professors to Courses (One-to-Many):
+
+A professor can teach multiple courses, but each course is taught by a single professor.
+
+Why These Participations:
+
+1. Students → Courses (Partial Participation):
+
+Not all students may enroll in a course.
+
+2. Courses → Students (Total Participation):
+
+A course must have at least one student enrolled (otherwise, it shouldn’t exist).
+
+3. Professors → Courses (Total Participation):
+
+Every course must be assigned a professor.
+
+4. Courses → Professors (Partial Participation):
+
+A professor may teach multiple courses, but they are not required to teach any.
+
+
+### Chen Diagram
+
+
+```{dot} 
+
+graph ER {
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    bgcolor=transparent;
+
+    layout=neato  
+    scale=1.2     
+
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // Define nodes
+    node [shape=box];
+    student; course; professor;
+    
+    node [shape=ellipse];
+    {node [label="name"] name0; name1; name2;}
+    studentID; major; courseID; title; credit_hours; professorID; department;
+    
+    node [shape=diamond,style=filled,color=lightgrey]; 
+    "Enrolls"; "Teaches";
+
+    // Define edges
+    student -- studentID;
+    student -- name0;
+    student -- major;
+    student -- "Enrolls" [label="m"];
+    "Enrolls" -- course [label="n"];
+    
+    course -- courseID;
+    course -- title;
+    course -- credit_hours;
+    course -- "Teaches" [label="n"];
+    "Teaches" -- professor [label="1"];
+    
+    professor -- professorID;
+    professor -- name1;
+    professor -- department;
+} 
+
+```
+
+### Crows Foot diagram
+
+
+```{mermaid}
+erDiagram
+    STUDENT {
+        int studentID
+        string name
+        string major
+    }
+    
+    COURSE {
+        int courseID
+        string title
+        int credit_hours
+    }
+    
+    PROFESSOR {
+        int professorID
+        string name
+        string department
+    }
+    
+    STUDENT ||--o{ COURSE : enrolls
+    PROFESSOR ||--o{ COURSE : teaches 
+```
+
+
+### Relational model
+
+Relations and Attributes:
+
+
+1. Student (studentID, name, major)
+2. Course (courseID, title, credit_hours)
+3. Professor (professorID, name, department)
+
+
+
+Primary and Foreign Keys:
+
+
+1. Student: studentID (PK)
+2. Course: courseID (PK)
+3. Professor: professorID (PK)
+
+
+
+
+
+## Model 2 - Hospital Patient Management System
+
+Consider a hospital that wants to manage patients, doctors, and appointments. Each patient has a patient ID, name, and date of birth. Doctors have a doctor ID, name, and specialty. Appointments have an appointment ID, date, and time. A patient can have multiple appointments, and each appointment involves one patient. A doctor can have multiple appointments, but each appointment is handled by a single doctor.
+
+Entities:
+
+1. Patients
+
+2. Doctors
+
+3. Appointments
+
+Schema:
+
+1. Each patient has: a patient ID, name, and date of birth.
+
+2. Each doctor has: a doctor ID, name, and specialty.
+
+3. Each appointment has: an appointment ID, date, and time.
+
+Cardinality:
+
+1. A patient can have multiple appointments, and each appointment involves one patient.
+
+2. A doctor can have multiple appointments, but each appointment is handled by a single doctor.
+
+### Design choices
+
+Why These Entities?
+
+1. Patient → Represents individuals receiving medical care.
+
+2. Doctor → Represents medical professionals providing treatment.
+
+3. Appointment → The event linking patients and doctors.
+
+
+Why These Cardinalities:
+
+1. Patients to Has to Appointments (One-to-Many):
+
+A patient can have multiple appointments, but each appointment is linked to one patient.
+
+2. Doctors to Handles to Appointments (One-to-Many):
+
+A doctor can have multiple appointments, but each appointment is handled by a single doctor.
+
+
+
+Why These Participations:
+
+1. Patients → Has (Partial Participation):
+
+A patient may not have any appointments.
+
+2. Appointments → Has (Total Participation):
+
+Every appointment must be linked to a patient.
+
+3. Doctors → Handles (Partial Participation):
+
+A doctor may not have any scheduled appointments.
+
+4. Appointments → Handles (Total Participation):
+
+Every appointment must have a doctor assigned.
+
+
+
+
+
+
+### Chen Diagram
+```{dot} 
+graph ER {
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    bgcolor=transparent;
+
+    layout=neato  
+    scale=1.2     
+
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // Define nodes
+    node [shape=box];
+    patient; doctor; appointment;
+    
+    node [shape=ellipse];
+    {node [label="name"] name0; name1;}
+    patientID; dob; doctorID; specialty; appointmentID; date; time;
+    
+    node [shape=diamond,style=filled,color=lightgrey]; 
+    "Has"; "Handles";
+
+    // Define edges
+    patient -- patientID;
+    patient -- name0;
+    patient -- dob;
+    patient -- "Has" [label="1"];
+    "Has" -- appointment [label="m"];
+    
+    appointment -- appointmentID;
+    appointment -- date;
+    appointment -- time;
+    appointment -- "Handles" [label="1"];
+    "Handles" -- doctor [label="m"];
+    
+    doctor -- doctorID;
+    doctor -- name1;
+    doctor -- specialty;
+}
+```
+
+### Crows Foot diagram
+
+```{mermaid}
+erDiagram
+    PATIENT {
+        int patientID
+        string name
+        date dob
+    }
+    
+    APPOINTMENT {
+        int appointmentID
+        date date
+        time time
+    }
+    
+    DOCTOR {
+        int doctorID
+        string name
+        string specialty
+    }
+    
+    PATIENT ||--o{ APPOINTMENT : has
+    DOCTOR ||--o{ APPOINTMENT : handles
+
+```
+
+
+
+### Relational model
+
+Relations and Attributes:
+
+1. Patient (patientID, name, dob)
+2. Doctor (doctorID, name, specialty)
+3. Appointment (appointmentID, date, time, patientID, doctorID)
+
+
+Primary and Foreign Keys:
+
+1. Patient: patientID (PK)
+2. Doctor: doctorID (PK)
+
+3. Appointment: appointmentID (PK), patientID (FK → Patient), doctorID (FK → Doctor)
+
+
+
+
+
+
+
+
+## Model 3 - Movie Theater Booking System
+
+Consider a movie theater that wants to manage customers, movies, and screenings. Each customer has a customer ID, name, and membership status. Movies have a movie ID, title, and duration. Screenings have a screening ID, date, and time. A customer can attend multiple screenings, and each screening can have multiple customers. A movie can have multiple screenings, but each screening features a single movie.
+
+
+Entities: 
+
+1. Customers
+
+2. Movies
+
+3. Screening
+
+Schema: 
+
+1. Each customer has: a customer ID, name, and membership status.
+
+2. Each movie has a movie ID, title, and duration
+
+3. Each screening has a screening ID, date, and time. 
+
+Cardinality:
+
+1. A customer can attend multiple screenings, and each screening can have multiple customers. 
+
+2. A movie can have multiple screenings, but each screening features a single movie.
+
+### Design choices
+
+Why These Entities?
+
+
+
+1. Customer → Represents individuals purchasing tickets.
+
+2. Movie → The content being screened.
+
+3. Screening → Represents a specific showing of a movie at a given time.
+
+
+
+Why These Cardinalities:
+
+
+
+1. Customers to Books to Screenings (Many-to-Many):
+
+A customer can book multiple screenings, and each screening can have multiple customers.
+
+2. Movies to Scheduled to Screenings (One-to-Many):
+
+A movie can have multiple screenings, but each screening is for a single movie.
+
+
+Why These Participations:
+
+
+
+1. Customers → Books (Partial Participation):
+
+A customer may not book any screenings.
+
+2. Screenings → Books (Total Participation):
+
+A screening must have at least one customer booked.
+
+3. Movies → Scheduled (Total Participation):
+
+A movie must be scheduled for at least one screening.
+
+4. Screenings → Scheduled (Partial Participation):
+
+Each screening must be linked to a single movie.
+
+
+
+### Chen Diagram
+
+
+```{dot}
+
+graph ER {
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    bgcolor=transparent;
+
+    layout=neato  
+    scale=1.2     
+
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // Define nodes
+    node [shape=box];
+    customer; movie; screening;
+    
+    node [shape=ellipse];
+    {node [label="name"] name0; name1;}
+    customerID; membership_status; movieID; title; duration; screeningID; date; time;
+    
+    node [shape=diamond,style=filled,color=lightgrey]; 
+    "Books"; "Scheduled";
+
+    // Define edges
+    customer -- customerID;
+    customer -- name0;
+    customer -- membership_status;
+    customer -- "Books" [label="m"];
+    "Books" -- screening [label="n"];
+    
+    screening -- screeningID;
+    screening -- date;
+    screening -- time;
+    screening -- "Scheduled" [label="n"];
+    "Scheduled" -- movie [label="1"];
+    
+    movie -- movieID;
+    movie -- title;
+    movie -- duration;
+}
+
+```
+
+
+### Crows Foot diagram
+
+
+```{mermaid}
+
+erDiagram
+    CUSTOMER {
+        int customerID
+        string name
+        string membership_status
+    }
+    
+    MOVIE {
+        int movieID
+        string title
+        int duration
+    }
+    
+    SCREENING {
+        int screeningID
+        date date
+        time time
+    }
+    
+    CUSTOMER ||--o{ SCREENING : books
+    MOVIE ||--o{ SCREENING : scheduled
+
+```
+
+
+### Relational model
+
+Relations And Attributes:
+
+
+1. Customer (customerID, name, membership_status)
+
+
+2. Movie (movieID, title, duration)
+
+
+3. Screening (screeningID, date, time, movieID)
+
+
+4. Booking (customerID, screeningID) → (Bridge table for many-to-many relationship)
+
+
+
+Primary And Foreign Keys:
+
+
+
+1. Customer: customerID (PK)
+
+2. Movie: movieID (PK)
+
+3. Screening: screeningID (PK), movieID (FK → Movie)
+
+4. Booking: customerID (FK → Customer), screeningID (FK → Screening) (Composite PK)
+
+
+
+
+
+
+
+
+
+
+
+# README
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Reflection
+
+What was the most surprising (good or bad) thing that you learned by doing this assignment?
+
+: The most surprising thing I learned from Homework 3 was the amount of work and how important it is to have a great database design from the beginning. When we are first creating database designs from our own examples, having effienct conceptions of the problem and efficient relationships in the problem is essential for creating a database which is efficient itself. Making sure this step is clear in the process, which is efficientlay crafting databases from the beginning is crucial in database desing. I am glad I got practice learning ER modeling from my own examples. 
+
+
+How much time did you spend on this assignment?
+
+: I spend roughly 1 hour and 45 minutes on this assignment since its structure was already pretty similar to Homework 2. 
+
+What CS classes have you had that the quarto math expressions and diagrams would have made it easier?
+
+: The only classes I can think of which it would have made life easier might have been my website design and development class as well as Algorithms & Data Structures, which I took back in 2022. It also might have been useful in my Discrete Math course.
+
+

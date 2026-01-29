@@ -1,0 +1,43 @@
+---
+title: Video Pitch - Deliverable 4
+---
+
+[[Link to repository](https://github.com/cmsc-vcu/cmsc408-sp2025-del4-408-crew/tree/main)]
+
+# Video pitch
+
+This is 408 Crew's video pitch!
+
+<iframe id="kaltura_player" src="https://cdnapisec.kaltura.com/p/1888231/sp/188823100/embedIframeJs/uiconf_id/28242251/partner_id/1888231?iframeembed=true&playerId=kaltura_player&entry_id=1_ls096t3m&flashvars[streamerType]=auto&amp;flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=1_q1mdh3mp" width="400" height="285" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="408 Crew Database Proposal"></iframe>
+
+
+This video pitch proposal highlights 4 areas: its Problem Domain, the Need for the database, the Context, Scope, and Perspective of its application, and our team's motivation behind this choice. Each of these areas are explained in greater detail below.
+
+## Problem Domain
+
+A country club offers memberships to many different individuals who utilize the various different facilities and services offered. Club members pay monthly fees for their individual memberships and also may pay for other services and activities offered by the club. A database to manage the country club memberships would track various details of each member including names, contact information, membership status, membership type, payment history, attendance records, etc. The database would enable the club to maintain up to date and accurate member records from billing, activity tracking, and personal information reducing any errors.
+
+## Need
+
+The database is important to efficiently maintain the membership, as it safely stores member information type of membership, membership payment history and billing, it helps keep track of events in which the country club has, and what member and type of membership access allows for attendance to the event  - Allows for personalized tracking of members preferred activities, easier to cater to them on an individual basis (Transaction is easier). Up to date contact information is also a big issue so storing the recent information of members is a problem that the database eliminates (doing so of course in a secure manner.)
+
+## Context, Scope, Perspective
+
+The DB is for Country Club Members and Country Club Owners. 
+
+Country Club Members will receive additional expectations for their arrival and the duration of their stay due to these features. With isolated data used from purchase history while at the club for example, We will make it easier than ever before for more people to be treated with the expectation of their arrival. Such as the results of an increase in marketing for a simple item or rather the time and duration of their stay to even result in specific lightings and patterns for that viewer to create an anticipated ‘entrance’ over time.
+For Country Club owners, Business owners can creatively use our tool to generate any data or statistics related to any Country club member. 
+
+This data base also functions upon real time management and operations of the business. 
+The database is for the management team of the Country club. A key feature of the database is for the coach in the domain of a sports team as the club manager has to provide access to the database to all country club employees and they can update, add, and delete things in and out of the database. 
+
+Data retrieval is also given to specific department manager so they can easily access the information and relay it to their team.
+
+I couldn't find any apps too similar to ours based upon a search with Chatgpt.
+
+
+
+## Motivation
+
+Our team selected this problem domain because it was designed around a useful scenario, our team members had former experience in the subject matter, and it could have real application due to its simplicity and usefulness. Operations derived from this database can be as complex as useful for any of the business’s needs with the data despite the initial appearance in the database design. By making the foundation of this data base revolving around a simple collection of data and the complex operations which can be creatively configured from that data. 
+We chose this database due to KC proposing the idea. We can have a database that keeps track of members of a country club- we can account for their monthly club membership fee, times they attend the club a month etc.

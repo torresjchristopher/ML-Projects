@@ -1,0 +1,236 @@
+---
+title: Homework 6 - Creating a resume database
+---
+
+This Homework, we will be walking through the steps it takes to connect to a database, and then produce equations on this database using SQL and SQL functions we developed in the My-DDL.SQL file. Both that file and this one will be helpful to understand what is taking place. We are going to be manipulating our HR database by editing the People, Skills, and Peopleskills tables! We will walk through each table, before performing filters and functions on them in the Queries section below! Welcome to Homework 4!
+
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw6-serrotrehpotsirhc.git>
+
+
+```{python}
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+print("Checking env variables:")
+for key in ["CMSC408_HW6_USER", "CMSC408_HW6_PASSWORD", "CMSC408_HW6_HOST", "CMSC408_HW6_DB_NAME"]:
+    print(f"{key} = {os.getenv(key)}")
+
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW6_USER",
+  'password': "CMSC408_HW6_PASSWORD",
+  'host': "CMSC408_HW6_HOST",
+  'database': "CMSC408_HW6_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+
+```
+
+
+## Overview and description
+
+The database will represent a company-wide resume, capturing the collective skills and certifications of all the people in your company. The database will capture skills, employees and their roles within the company. The database will help our employer find employees with specific skills, list the skills of any employee and help find gaps in the skill sets of employees in specific roles.
+
+## Crows-foot diagram
+
+This is the Crows Foot diagram for this database. People have skills. People can have many skills, and skills can each have many people. Both People and Skills are each One to Many toward each other, making both Many to Many.
+
+```{mermaid}
+%%| echo: false
+erDiagram
+    people ||--o{ peopleskills : has
+    skills ||--o{ peopleskills : includes
+
+    people {
+        int id PK
+        string first_name
+        string last_name
+        string email
+        string linkedin_url
+        string headshot_url
+        string discord_handle
+        string brief_bio
+        date date_joined
+    }
+
+    skills {
+        int id PK
+        string name
+        string description
+        string tag
+        string url
+        string extra
+    }
+
+    peopleskills {
+        int id PK
+        int skills_id FK
+        int people_id FK
+        datetime date_acquired
+    }
+
+```
+
+
+## Examples of data in the database
+
+The following sections provide an overview of the schema including table names, and number of rows and columns in each table.
+
+Each table is presented along with a description of it's contents.
+
+### Tables and metrics in the database
+
+```{python}
+#| echo: false
+sql = f"""
+WITH TableInfo AS (
+    SELECT 
+        table_name AS TableName,
+        table_rows AS RecordCount
+    FROM 
+        information_schema.tables
+    WHERE 
+        table_schema = DATABASE()
+),
+ColumnInfo AS (
+    SELECT 
+        table_name AS TableName,
+        COUNT(column_name) AS ColumnCount
+    FROM 
+        information_schema.columns
+    WHERE 
+        table_schema = DATABASE()
+    GROUP BY 
+        table_name
+)
+SELECT 
+    t.TableName,
+    t.RecordCount,
+    c.ColumnCount
+FROM 
+    TableInfo t
+JOIN 
+    ColumnInfo c ON t.TableName = c.TableName;
+"""
+run_sql_and_return_html( cnx, sql )
+```
+
+### People table
+
+The *people* table contains a SQL Select call to print the entire people table, using the *.
+
+Below is a list of data in the *people* table.
+
+```{python}
+run_sql_and_return_html( cnx, f"""
+select * from people;
+""" )
+
+```
+
+### Skills table
+
+The *skills* table contains a SQL Select call to print the entire skills table, using the *.
+
+Below is a list of data in the *skills* table.
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from skills;
+""" )
+```
+
+### PeopleSkills table
+
+The *peopleskills* table contains a SQL Select call to print the entire peopleskils table, using the *.
+
+Below is a list of data in the *peopleskills* table.
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from peopleskills;
+""" )
+```
+## Queries
+
+### List skill id, name and tag ordered by name
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT id, name, tag
+FROM skills
+ORDER BY name;
+""" )
+```
+
+### List people names and email addresses ordered by last_name
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT first_name, last_name, email
+FROM people
+ORDER BY last_name;
+""" )
+```
+
+
+### List skill names of Person 1
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT s.name
+FROM skills s
+JOIN peopleskills ps ON s.id = ps.skills_id
+WHERE ps.people_id = 1;
+""" )
+```
+
+### List people names with Skill 6
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT p.first_name, p.last_name
+FROM people p
+JOIN peopleskills ps ON p.id = ps.people_id
+WHERE ps.skills_id = 6;
+""" )
+```
+
+
+### List names and email addresses of people without skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT p.first_name, p.last_name, p.email
+FROM people p
+LEFT JOIN peopleskills ps ON p.id = ps.people_id
+WHERE ps.skills_id IS NULL;
+""" )
+```
+
+### List names and tags of unused skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT s.name, s.tag
+FROM skills s
+LEFT JOIN peopleskills ps ON s.id = ps.skills_id
+WHERE ps.people_id IS NULL;
+""" )
+```
+
+
+## Reflection
+
+This assignment took forever! It took forever for me to get connected to the database. I had to run .env and make sure the script was picking up the credentials. Then I found out it was related to an encoding issue I ran into when I accidently produced a file from the SQLTools generated connection. I cleaned up my mistakes after a while, and finally got into the DDL and SQL coding! This took up so much time, and I watched both lectures! 
+
+The lectures jump straight to the assignment with no server connectivity issue. It was a whole thing for me! However, after getting it all worked out, it was a satisfying practice with SQL Tools, and I am looking forward to our final assignments. I am going to get into contact with my team soon to set up a way to start thinking of how we are going to implement our country club database. Thank you!
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::

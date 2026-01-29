@@ -1,0 +1,84 @@
+---
+title: Deliverable 6 - Running with Docker
+---
+
+Hello! 
+
+Welcome to Deliverable 6! I am extremely excited to get into this Homework, where I will explore Docker containers and interacting with remote SQL servers! 
+
+This report documents my experiments with Docker and Docker Compose!
+
+# Example and experiments
+
+In the sections below I explore the example docker code provided
+and experiment with the outputs.
+
+To demonstrate that I did play with things, I'm providing screen shots
+of the changes that I made to the HTML files within each container.
+
+
+## Example 1 - NGINX server in a container
+
+This example creates a simple, static web server with the html file stored inside the container.
+
+![](assets/NGINX%20Static%20Example.JPG)
+
+
+## Example 2 - NGINX server with local volume
+
+This example creates a simple web server container with the html files stored on your local disk.
+
+![](assets/NGINX%20Static%20Volume%20Example.JPG)
+
+
+## Example 3 - APACHE and PHP with CMSC508 server
+
+This HTML creates a local apache web server serving html/php pages from your local disk, connected to cmsc508.com using your username and password.
+
+![](assets/Apache%20PHP%20Local%20MySQL%20Example.JPG)
+![](assets/Table%20Example.JPG)
+
+## Example 4 - APACHE and PHP with local MYSQL database
+
+This HTML creates a local apache setb server serving html/php pages from your local disk, connected to a locally running mysql DB and locally running phpmyadmin. I have gotten all the containers up and running.
+
+
+![](assets/Apache%20PHP%20Remote%20MySQL%20Example.JPG)
+
+## Example 5 - PRODUCTION Example
+
+This screenshot shows the Hello World page for the database. Below this message are hyperlinks for each of the separate tables of this database, stored locally, and accessed through docker. This HTML creates a locally running nginx load balancer and reverse proxy, apache-php server, mysql database and phpmyadmin all talking together
+
+![](assets/Production%20Example.JPG)
+
+
+
+
+
+
+
+
+
+
+# Reflection
+
+What was the hardest part of this project?
+: Getting Docker up and running. I eventually realized I needed to be in the folder of each example to run docker instead of creating a new separate docker. I didn't realize each folder of the example was the opportunity to use docker, meaning I had to compose in each of those folders. I also had an image issue. It said image not found. Starting Docker and restarting Docker fixed it. After I realized I had to compose Docker in each of the example folders and then document these examples in the report.qmd, everything went smoothly. It was difficult setting up each container, but rewarding when everything worked out!
+
+What was the easiest part of this project?
+: Actually learning the examples after I got the logistics figured out and after I got everything up and running. 
+
+What was your biggest take-away?  that is, what did you find most surprising?
+: Making sure I know how to run Docker properly and connect to the relevant SQL database in order to interact with it across these HTML codes is crucial to creating a database project which can successfully interact with a remote database.
+
+How might you incorporate these techniques into your senior/capstone design project?
+: I will be sure to thoroughly understand the ramifications of using a container system to generate HTML and interact with a remote database using SQL and PHP ADMIN. Having each of these tools in synch and orchestrating together, will be crucial for the success of our database, which we will be fully creating shortly! Thank you!
+
+
+
+
+# README
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::

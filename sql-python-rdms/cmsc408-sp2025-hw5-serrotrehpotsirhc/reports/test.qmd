@@ -1,0 +1,49 @@
+---
+title: test
+---
+
+```{python}
+#| echo: false
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW5_USER",
+  'password': "CMSC408_HW5_PASSWORD",
+  'host': "CMSC408_HW5_HOST",
+  'database': "CMSC408_HW5_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+```
+
+```{python}
+run_sql_and_return_html(cnx,"""
+show databases
+""")
+```
+
+
+
+```{python}
+run_sql_and_return_html(cnx,"""
+show tables
+""")
+```
+
+
+
+
+```{python}
+run_sql_and_return_html(cnx,"""
+select
+  *
+from
+  countries
+limit
+  10
+""")
+```
+
+
+

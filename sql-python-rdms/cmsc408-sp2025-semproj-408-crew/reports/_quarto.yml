@@ -1,0 +1,35 @@
+project:
+    type: website
+    output-dir: ../docs
+
+date: last-modified
+subtitle: CMSC408 - Spring 2025 - Team 408 Crew
+
+author:
+    - name: Lindsey Marandina
+      email: marandinalc@vcu.edu
+    - name: Christopher Torres
+      email: Torresc6@vcu.edu
+    - name: KC Onyedeke
+      email: Onyedekek@vcu.edu
+
+format:
+    html:
+        embed-resources: true
+        html-math-method: katex
+        theme: spacelab
+        toc: true
+
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: Video Pitch
+        href: deliverable-4.qmd
+      - text: Design
+        href: deliverable-5.qmd
+      - text: Implementation
+        href: deliverable-7.qmd

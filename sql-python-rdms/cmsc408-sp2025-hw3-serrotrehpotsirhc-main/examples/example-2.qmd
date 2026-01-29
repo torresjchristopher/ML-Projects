@@ -1,0 +1,78 @@
+---
+title: Study Guide for Quiz 2
+date: last-modified
+---
+
+
+## Dijkstra's Algorithm
+
+1. Initialization:
+
+$$
+d(v) = 
+\begin{cases} 
+0 & \text{if } v = s \\
+\infty & \text{otherwise}
+\end{cases}
+$$
+
+2. Greedy Selection:
+
+$$
+u = \arg \min_{v \in Q} d(v)
+$$
+
+3. Relaxation:
+
+$$
+\text{if } d(u) + w(u, v) < d(v) \text{ then } d(v) = d(u) + w(u, v)
+$$
+
+4. Termination:
+
+Repeat until$( Q )$is empty.
+
+## Relational Algebra Division
+
+A more complicated example of a relational algebra operation involves implementing **Division**—a challenging and somewhat abstract operator. Division is used when you need to find tuples in one relation that are related to **all** tuples in another relation.
+
+### Problem:
+Suppose we have the following relations:
+
+- $A(X, Y)$: a relation containing pairs of values.
+- $B(Y)$: a relation with a single attribute$Y$.
+
+The goal of the division operation $A \div B$is to find all $X$ in $A$ such that for every $Y$ in $B$, there is a corresponding $(X, Y)$ pair in $A$.
+
+### Relational Algebra Solution:
+The division operation can be expressed using a combination of relational algebra operations. Here's how we can break it down:
+
+1. **Find the Cartesian product of $X$ and $B$**:
+$$
+C = \Pi_X(A) \times B
+$$
+This is the set of all possible combinations of $X$ from $A$ with every $Y$ from $B$.
+
+2. **Subtract pairs in$A$from the Cartesian product**:
+$$
+D = C - A
+$$
+   This step gives us the set of $(X, Y)$ -pairs that are **not** in $A$. These represent the pairs where $X$ does not match with all $Y$-values.
+
+3. **Project the result onto $X$**:
+$$
+E = \Pi_X(D)
+$$
+This projects $D$ onto the $X$-attribute, resulting in the $X$-values that do not have corresponding pairs for all $Y$-values in $B$.
+
+4. **Subtract from all $X$**:
+$$
+F = \Pi_X(A) - E
+$$
+This final step gives us the $X$-values that are paired with **every** $Y$-value in $B$, which is the result of $A \div B$.
+
+
+### Explanation in the Context of a Database:
+Imagine you have a table$A$of students and the courses they've passed, and a table$B$with a list of all required courses. The goal is to find the students (values of $X$) who have passed **all** the required courses (values of $Y$ in $B$).
+
+This is useful in many real-world scenarios, such as checking which students are eligible to graduate or determining which products meet all necessary certifications.

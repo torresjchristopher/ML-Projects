@@ -1,0 +1,51 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker-apache-php
+    container_name: apache-semproj-php-container
+    ports:
+      - "8080:80" # Map port 8080 to 80
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASS}
+      MYSQL_HOST: db
+      MYSQL_USER: ${DOCKER_DB_USER}
+      MYSQL_PASSWORD: ${DOCKER_DB_PASS}
+      MYSQL_DATABASE: ${DOCKER_DB_DBNAME}
+    volumes:
+      - ./site:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    command: --local-infile=1
+    container_name: mysql-semproj-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DOCKER_DB_USER}
+      MYSQL_PASSWORD: ${DOCKER_DB_PASS}
+      MYSQL_DATABASE: ${DOCKER_DB_DBNAME}
+    ports:
+      - "3306:3306" # MySQL port
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d  # Initializes the DB with DDL
+      - mysql_data:/var/lib/mysql         # Persistent MySQL data
+      - ./Data:/var/lib/mysql-files       # Mounts Data folder to MySQL's required directory
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    restart: always
+    ports:
+      - "8081:80" # Expose phpMyAdmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:

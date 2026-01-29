@@ -1,0 +1,66 @@
+---
+title: Simpsons loader script for Homework 9
+---
+
+
+## Get database connection params from .env
+
+```{python}
+#| eval: true
+#| echo: false
+
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file, execute_ddl
+
+# Load these variables from .env file.
+config_map = {
+    'user':'CMSC408_admin_user',
+    'password':'CMSC408_admin_pass',
+    'host':'CMSC408_admin_host',
+    'database':'CMSC408_simpsons_db'
+}
+
+cnx,config = create_db_wrapper( config_map )
+  
+```
+
+## Load database
+
+```{python}
+filename = "./simpsons-ddl.sql"
+messages,errors = execute_ddl_from_file(filename, cnx)
+
+```
+
+
+## Grant permissions for other to access
+
+### Build a list of users and tables
+
+```{python}
+result = run_sql_and_return_df(cnx,f"""
+SELECT CONCAT('GRANT SELECT ON simpsons_data.* TO ''', user, '''@''', host, ''';') 
+FROM mysql.user 
+WHERE user NOT IN ('mysql.session', 'mysql.sys', 'root');
+""")
+
+cmds = result.iloc[:, 0].tolist()
+
+```
+
+### Run grant commands
+
+```{python}
+execute_ddl(cnx,"\n".join(cmds))
+```
+
+## Run Query
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT person, quote
+FROM simpsons_data.simpsons_quotes
+ORDER BY RAND()
+LIMIT 1;
+""")
+```

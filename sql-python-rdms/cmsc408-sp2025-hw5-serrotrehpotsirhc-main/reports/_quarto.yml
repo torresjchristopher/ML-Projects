@@ -1,0 +1,20 @@
+project:
+    type: default
+
+date: last-modified
+
+author:
+    - name: Skippy McBoatface
+      email: skippy@mcboatface.com
+
+format:
+    html:
+        embed-resources: true
+        html-math-method: katex
+        theme: spacelab
+        toc: true
+
+execute:
+    echo: true
+    eval: true
+    

@@ -1,0 +1,762 @@
+---
+title: Homework 2 - ER Diagrams
+author:
+    - name: Christopher Torres
+      email: Torresc6@vcu.edu
+---
+
+[[Link to repository](https://github.com/cmsc-vcu/cmsc408-sp2025-hw2-serrotrehpotsirhc)]
+
+
+Here it is!
+
+# Intro
+
+Welcome to Homework 2! 
+
+Today we are going to be learning about ER Diagrams as well as better developing Design practices by working through the Diagramming and Design implementation of 3 different scenarios!
+
+These scenarios are databases for: 
+
+1. Library Management System
+
+2. Event Ticketing System
+
+3. University Research Grant System
+
+There is an overview of ER or Entity Relationship Diagrams at the bottom of this page in the README file, if you would like a refresher on ER Diagrams from class, or if you are totally new to the subject. 
+
+This assignment is about getting better practice with our:
+
+1. Design choices
+2. ER Diagramming
+
+We are going to be Diagramming in Graphiz for Chen's Notation adn Mermaid for Crows Foot Notation.
+
+Graphiz and Mermaid are both tools inside of Quarto. We spent Homework 1 learning and getting familiar with Quarto, GIT, and VsCode, so take a look back at that if interested in any of those tools. 
+
+Here are definitions for each Notation
+
+Chen’s Notation:
+
+A way to visually map out data where:
+
+Entities are drawn as rectangles and attributes are shown as ovals.
+
+Relationships are represented by diamonds.
+
+
+Crow’s Foot Notation:
+
+A popular method for designing databases that uses:
+
+Tables to represent entities.
+
+Special symbols (resembling a “crow’s foot”) on the lines connecting tables to indicate how many items can be related.
+
+
+This style helps quickly see the “one-to-many” or “many-to-many” relationships between tables.
+
+3. Understanding of Relation Schema by building Relation Sets for each scenario
+
+Relation Schema:
+
+Think of it as a blueprint for a database table:
+
+It names the table based on an Entity.
+It lists the columns or Attributes in that table.
+
+It includes rules such as which column uniquely identifies each record or the primary key and which columns link to other tables through foreign keys.
+
+
+# ER Modeling Exercises
+
+In Homework 2, we are going to be designing and modeling our conceptual designs in both:
+
+1. Chen Notation
+
+2. Crows Foot Notation
+
+And:
+
+3. Reviewing design assumptions, considerations and tradeoffs
+
+4. Building theoretical relation sets for the system
+
+
+Here we go! 
+
+Here are each of the three systems:
+
+## 1. Library Management System
+
+Picture a library that needs to manage books, members, and loans. Each book has a book ID, title, and author. Members have a member ID, name, and membership date. Loans have a loan ID, loan date, and return date. A member can borrow multiple books, and each book can be borrowed by multiple members over time. Each loan is associated with a single member borrowing a single book.
+
+
+### Conceptual design in Chen Notation
+
+Entities and Attributes:
+
+* Book: Represents the books in the library. Key attributes include book ID, title, and author.
+* Member: Represents library members. Key attributes include member ID, name, and membership date.
+* Loan: Represents the record of a book loan. Its attributes include loan ID, loan date, and return date.
+
+
+
+Relationships:
+
+* Borrows (between Member and Loan):
+
+        Member to Loan: A member can borrow many books over time, hence may have multiple loan records (one-to-many).
+        Loan to Member: Each loan record is associated with exactly one member.
+
+
+* Loan_For (between Book and Loan):
+
+        Book to Loan: A book can be loaned multiple times over its lifetime (one-to-many).
+        Loan to Book: Each loan record is for a single book.
+
+```{dot}
+
+graph ER {
+    // Main graph settings (adjust these for your final draft as needed)
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    label="Library Management System
+    Chen's Notation";
+    labelloc="t";
+    labeljust="c";
+    bgcolor=transparent;
+    layout=neato
+    scale=1.2
+
+    // Set defaults for nodes (smaller font size)
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // ----------------------------------------------------------------
+    // Define Entities (as boxes)
+    node [shape=box];
+    Book; Member; Loan;
+
+    // ----------------------------------------------------------------
+    // Define Attributes (as ellipses)
+
+    // Attributes for Book
+    node [shape=ellipse];
+    { 
+      node [label="bookID"] bookID;
+      node [label="title"] title;
+      node [label="author"] author;
+    }
+
+    // Attributes for Member
+    { 
+      node [label="memberID"] memberID;
+      node [label="name"] memberName;
+      node [label="membershipDate"] membershipDate;
+    }
+
+    // Attributes for Loan
+    { 
+      node [label="loanID"] loanID;
+      node [label="loanDate"] loanDate;
+      node [label="returnDate"] returnDate;
+    }
+
+    // ----------------------------------------------------------------
+    // Define Relationships (as diamonds with light grey fill)
+    node [shape=diamond, style=filled, color=lightgrey];
+    "Borrows"; "Loan_For";
+
+    // ----------------------------------------------------------------
+    // Connect Attributes to Their Entities
+
+    // Connect Book attributes to Book
+    bookID -- Book;
+    title -- Book;
+    author -- Book;
+
+    // Connect Member attributes to Member
+    memberID -- Member;
+    memberName -- Member;
+    membershipDate -- Member;
+
+    // Connect Loan attributes to Loan
+    loanID -- Loan;
+    loanDate -- Loan;
+    returnDate -- Loan;
+
+    // ----------------------------------------------------------------
+    // Connect Entities to Relationships with Cardinalities
+
+    // "Borrows" relationship:
+    // A member can have multiple loans (borrow multiple books over time),
+    // but each loan is associated with exactly one member.
+    Member -- "Borrows" [label="1"];
+    "Borrows" -- Loan [label="n"];
+
+    // "Loan_For" relationship:
+    // A book can be loaned many times (borrowed by multiple members over time),
+    // but each loan is for one specific book.
+    Book -- "Loan_For" [label="1"];
+    "Loan_For" -- Loan [label="n"];
+}
+
+```
+
+### Conceptual design in Crows foot notation
+
+
+Entities as Tables:
+
+
+* Book Table: Contains book ID (primary key), title, and author.
+
+
+* Member Table: Contains member ID (primary key), name, and membership date.
+
+
+* Loan Table: Contains loan ID (primary key), loan date, and return date, along with foreign keys referencing both the Book and Member tables.
+
+
+Relationship Cardinalities:
+
+
+* Member–Loan: The “1 : n” relationship indicates that one member can have multiple loans.
+
+* Book–Loan: The “1 : n” relationship indicates that one book can be associated with multiple loan records (borrowed multiple times).
+
+```{mermaid}
+erDiagram
+    BOOK {
+        int bookID
+        string title
+        string author
+    }
+    MEMBER {
+        int memberID
+        string name
+        date membershipDate
+    }
+    LOAN {
+        int loanID
+        date loanDate
+        date returnDate
+    }
+
+    MEMBER ||--o{ LOAN : borrows
+    BOOK ||--o{ LOAN : "is loaned in"
+    
+```
+
+### Design assumptions, considerations and tradeoffs
+
+Assumptions: 
+
+For this prompt, I assumed the Library needed to manage books, members, and loans. From there, I figured out:
+
+1. Each book has a book ID, title, and author. 
+2. Every members have a member ID, name, and membership date. 
+3. Loans have a loan ID, loan date, and return date. 
+
+Also, I learned the following rules:
+
+1. A member can borrow multiple books, and each book can be borrowed by multiple members over time. 
+2. Each loan is associated with a single member borrowing a single book.
+
+I assumed I needed to understand the cardinal relationships of these rules and reflect them in my design choices. 
+
+Considerations:
+
+1. Given these considerations, I wanted to make a diagram which could accomodate a member borrowing multiple books and each book able to be borrowed by multiple members over time as well as each loan is associated to a single member borrowing a single book. To do this, I designed an ER Diagram where each one member can have records at once and each record can be for one book. 
+
+2. This is a one to many for the relationship between member to record and a one to one relationship for record to book, book to record, and book to member at any one given moment of time. 
+
+3. This means I needed a system where members to records was the only relationship of one to many. The only other implementation which would have required one to many if we were to design a functionality related to record history, to see which members had checked out a specific book. 
+
+Tradeoffs:
+
+Tradeoffs of this design include:
+
+1. The lack of functionality for a useful relation from the Book's perspective. Despite a Book being able to be checked out by many Members over time, this functionality of this One to Many relationship is not included because it offers limited insight given the fact a book can only be checked out by one Member at any point in time. This data of the One to Many relationship between Book Loaners at any given point in time isn't incredibly useful from a Management perspective. 
+
+
+### Relation sets
+
+The following are the initial relation sets for the system:
+
+* BOOK( book_id, title, author )
+* MEMBER( member_id, name, membership_date )
+* LOAN( loan_id, loan_date, return_date, book_id, member_id )
+
+Here, book_id is a foreign key referencing BOOK(book_id).
+member_id is a foreign key referencing MEMBER(member_id).
+
+Design note: Although a book can be loaned many times and a member can borrow many books over time, each individual loan record relates one member to one book.
+
+
+## 2. Event Ticketing System
+
+Envision a ticketing platform that needs to manage events, customers, and tickets. Each event has an event ID, name, date, and location. Customers have a customer ID, name, email, and phone number. Tickets have a ticket ID, purchase date, and seat number. A customer can purchase multiple tickets, and each ticket is for a single event. An event can have multiple tickets sold, but each ticket is associated with only one customer.
+
+
+### Conceptual design in Chen Notation
+
+Entities and Attributes:
+
+* Event: Represents an event on the platform. Its attributes include event ID, name, date, and location.
+* Customer: Represents customers who purchase tickets. Its key attributes include customer ID, name, email, and phone number.
+* Ticket: Represents individual tickets purchased. Attributes include ticket ID, purchase date, and seat number.
+
+Relationships:
+
+* Purchases (between Customer and Ticket):
+
+        Customer to Ticket: A customer can purchase multiple tickets (one-to-many).
+        Ticket to Customer: Each ticket is purchased by one customer.
+
+
+* Is_For (between Event and Ticket):
+
+        Event to Ticket: An event can have many tickets sold (one-to-many).
+        Ticket to Event: Each ticket is associated with a single event.
+
+```{dot}
+
+graph ER {
+    // Main graph settings (adjust these for your final draft as needed)
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    label="Event Ticketing System
+    Chen's Notation";
+    labelloc="t";
+    labeljust="c";
+    // For final output, consider using: bgcolor=transparent
+    bgcolor=transparent;
+    layout=neato
+    scale=1.2
+
+    // Set defaults for nodes (smaller font size)
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // ----------------------------------------------------------------
+    // Define Entities (as boxes)
+    node [shape=box];
+    Event; Customer; Ticket;
+
+    // ----------------------------------------------------------------
+    // Define Attributes (as ellipses)
+
+    // Attributes for Event
+    node [shape=ellipse];
+    { 
+      node [label="eventID"] eventID;
+      node [label="name"] eventName;
+      node [label="date"] eventDate;
+      node [label="location"] eventLocation;
+    }
+
+    // Attributes for Customer
+    { 
+      node [label="customerID"] customerID;
+      node [label="name"] customerName;
+      node [label="email"] email;
+      node [label="phone number"] phone;
+    }
+
+    // Attributes for Ticket
+    { 
+      node [label="ticketID"] ticketID;
+      node [label="purchase date"] purchaseDate;
+      node [label="seat number"] seatNumber;
+    }
+
+    // ----------------------------------------------------------------
+    // Define Relationships (as diamonds with light grey fill)
+    node [shape=diamond, style=filled, color=lightgrey];
+    "Purchases"; "For_Event";
+
+    // ----------------------------------------------------------------
+    // Connect Attributes to Their Entities
+
+    // Connect Event attributes to Event
+    eventID -- Event;
+    eventName -- Event;
+    eventDate -- Event;
+    eventLocation -- Event;
+
+    // Connect Customer attributes to Customer
+    customerID -- Customer;
+    customerName -- Customer;
+    email -- Customer;
+    phone -- Customer;
+
+    // Connect Ticket attributes to Ticket
+    ticketID -- Ticket;
+    purchaseDate -- Ticket;
+    seatNumber -- Ticket;
+
+    // ----------------------------------------------------------------
+    // Connect Entities to Relationships with Cardinalities
+
+    // "Purchases" relationship: A customer can purchase multiple tickets,
+    // but each ticket is purchased by exactly one customer.
+    Customer -- "Purchases" [label="1"];
+    "Purchases" -- Ticket [label="n"];
+
+    // "For_Event" relationship: Each event can have many tickets sold,
+    // but each ticket is associated with one event.
+    Event -- "For_Event" [label="1"];
+    "For_Event" -- Ticket [label="n"];
+}
+
+
+```
+
+### Conceptual design in Crows foot notation
+
+Entities as Tables:
+
+* Event Table: Consists of event ID (primary key), name, date, and location.
+* Customer Table: Consists of customer ID (primary key), name, email, and phone.
+* Ticket Table: Consists of ticket ID (primary key), purchase date, and seat number, plus foreign keys that reference the associated event and customer.
+
+
+Relationship Cardinalities:
+
+* Customer–Ticket: A “1 : n” relationship indicating that one customer may purchase many tickets.
+* Event–Ticket: Also a “1 : n” relationship, indicating that an event can have many tickets, with each ticket tied to one event.
+
+```{mermaid}
+erDiagram
+    EVENT {
+        int eventID
+        string name
+        date date
+        string location
+    }
+    CUSTOMER {
+        int customerID
+        string name
+        string email
+        string phone
+    }
+    TICKET {
+        int ticketID
+        date purchaseDate
+        string seatNumber
+    }
+
+    CUSTOMER ||--o{ TICKET : purchases
+    EVENT ||--o{ TICKET : "is for"
+    
+```
+
+### Design assumptions, considerations and tradeoffs
+
+Assumptions: 
+
+Ticketing platform which needs to manage:
+
+1. Events
+2. Customers
+3. Tickets. 
+
+For each entity: 
+
+1. Each event has an event ID, name, date, and location. 
+2. Each customer has a customer ID, name, email, and phone number. 
+3. Each ticket has a ticket ID, purchase date, and seat number. 
+
+
+Rules or specifications: 
+
+1. A customer can purchase multiple tickets, and each ticket is for a single event. 
+2. An event can have multiple tickets sold, but each ticket is associated with only one customer.
+
+Considerations:
+
+I had to make a designed which adhered to these cardinalities: 
+
+1. Customer to Ticket: 1-to-Many.
+2. Event to Ticket: 1-to-many.
+
+In the end, I had to also make sure each ticket is explicitly associated with one customer and one event.
+
+Given this I decided to pivot the design to make sure Event and Customer interacted through Ticket with the relationships of Purchases and For_Event.
+
+
+Tradeoffs:
+
+1. Tradeoffs in this design included losing the ability to simplify the relationships to be juct Event and Customer. I feel while Ticket does include a necessary barrier between the two, given the fact that Tickets have their own records, it could be easier to just embed the Ticket data into the Customer and Event Profiles. However, as I am writing this, I think I framed my design on like an MLB team for example where the Event is at the same location and managed by the same organization every time, while this platform might involve events involving different groups. 
+
+2. Besides a lack of simplification of the Entities and the Design, I wanted to highlight another tradeoff which involved its eventual evolution into a more complex platform. By creating Ticket as a separate Entity, I am able to create a link between Customer and Event, which makes the model more flexible and scalable for future requirements like handling refunds or transfers. The tradeoff is thatit might introduce  performance overhead when aggregating data from multiple tables.
+
+### Relation sets
+
+The following are the initial relation sets for the system:
+
+* EVENT( event_id, name, date, location )
+* CUSTOMER( customer_id, name, email, phone )
+* TICKET( ticket_id, purchase_date, seat_number, event_id, customer_id )
+
+Here, event_id is a foreign key referencing EVENT(event_id) and customer_id is a foreign key referencing CUSTOMER(customer_id).
+
+Design note: Since each ticket is associated with a single event and a single customer, the TICKET relation includes the foreign keys for both.
+
+
+
+
+
+
+
+
+
+
+## 3. University Research Grant System
+
+
+Imagine a university that needs to track research grants, researchers, and projects. Each grant has a grant ID, funding amount, and sponsor name. Researchers have a researcher ID, name, department, and contact information. Projects have a project ID, title, and start date. A grant can fund multiple projects, but each project is funded by only one grant. A researcher can work on multiple projects, and each project can involve multiple researchers.
+
+
+
+### Conceptual design in Chen Notation
+Entities and Attributes:
+
+* Grant: This entity stores information about research grants. Its key attributes include the grant ID (a unique identifier), funding amount, and sponsor name.
+
+* Researcher: This entity represents researchers involved in projects. It includes a researcher ID, name, department, and contact information.
+
+* Project: This entity contains details about research projects. Its attributes include the project ID, title, and start date.
+
+Relationships:
+
+* Funds (between Grant and Project):
+        Grant to Project: A single grant can fund many projects, representing a one-to-many relationship.
+        Project to Grant: Each project is funded by exactly one grant.
+
+
+*Works_On (between Researcher and Project):
+        This is a many-to-many relationship, meaning a researcher can work on multiple projects and a project can have multiple researchers. In a physical design, this would typically be implemented with an associative (junction) table.
+
+```{dot}
+
+graph ER {
+  
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    label="University Research Grant System 
+    Chen's Notation";
+    labelloc="t";
+    labeljust="c";
+    bgcolor=transparent;
+    layout=neato
+    scale=1.2
+
+    
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // ----------------------------------------------------------------
+    // Define Entities 
+    node [shape=box];
+    Grant; Researcher; Project;
+
+    // ----------------------------------------------------------------
+
+    // Attributes for Grant
+    node [shape=ellipse];
+    { 
+      node [label="grantID"] Grant_id;
+      node [label="fundingAmount"] fundingAmount;
+      node [label="sponsorName"] sponsorName;
+    }
+
+    // Attributes for Researcher
+    { 
+      node [label="researcherID"] researcher_id;
+      node [label="name"] researcherName;
+      node [label="department"] department;
+      node [label="contactInfo"] contactInfo;
+    }
+
+    // Attributes for Project
+    { 
+      node [label="projectID"] project_id;
+      node [label="title"] title;
+      node [label="startDate"] startDate;
+    }
+
+    // ----------------------------------------------------------------
+    
+    node [shape=diamond, style=filled, color=lightgrey];
+    "Funds"; "Works_On";
+
+
+    Grant_id -- Grant;
+    fundingAmount -- Grant;
+    sponsorName -- Grant;
+
+    
+    researcher_id -- Researcher;
+    researcherName -- Researcher;
+    department -- Researcher;
+    contactInfo -- Researcher;
+
+  
+    project_id -- Project;
+    title -- Project;
+    startDate -- Project;
+
+    // ----------------------------------------------------------------
+    // Connect Entities to Relationships with Cardinalities
+
+    // "Funds" relationship: A grant funds many projects.
+    // Each project is funded by exactly one grant.
+    Grant -- "Funds" [label="1"];
+    "Funds" -- Project [label="n"];
+
+    // "Works_On" relationship: Researchers work on projects.
+    // A researcher can work on multiple projects and a project may involve many researchers.
+    Researcher -- "Works_On" [label="n"];
+    "Works_On" -- Project [label="n"];
+}
+
+
+```
+
+### Conceptual design in Crows foot notation
+
+Entities as Tables:
+
+* Grant Table: Contains columns for grant ID (primary key), funding amount, and sponsor name.
+* Researcher Table: Contains columns for researcher ID (primary key), name, department, and contact info.
+* Project Table: Contains columns for project ID (primary key), title, and start date, along with a foreign key (grant_id) that links each project to a single grant.
+
+Relationship Cardinalities:
+
+* Grant–Project: The line between Grant and Project is labeled “1 : n,” indicating that one grant may fund many projects.
+* Researcher–Project: The line between Researcher and Project is labeled “n : n,” indicating the many-to-many relationship where multiple researchers can be involved in multiple projects.
+
+
+
+```{mermaid}
+erDiagram
+    GRANT {
+        int grantID
+        float fundingAmount
+        string sponsorName
+    }
+    RESEARCHER {
+        int researcherID
+        string name
+        string department
+        string contactInfo
+    }
+    PROJECT {
+        int projectID
+        string title
+        date startDate
+    }
+
+    GRANT ||--o{ PROJECT : funds
+    RESEARCHER }|--|{ PROJECT : works_on
+```
+
+
+### Design assumptions, considerations and tradeoffs
+
+Assumptions: 
+
+A university needs to track:
+
+1. Research Grants
+2. Researchers
+3. Projects. 
+
+I learned this about each Entity:
+
+1. Each grant has a grant ID, funding amount, and sponsor name. 
+2. Each Researcher has a researcher ID, name, department, and contact information. 
+3. Each Project has a project ID, title, and start date. 
+
+Rules of specifications:
+
+1. A grant can fund multiple projects, but each project is funded by only one grant. 
+
+2. A researcher can work on multiple projects, and each project can involve multiple researchers.
+
+Considerations:
+
+1. Cardinality: 
+
+        A. Grant to Project: 1-to-Many
+        B. Researcher to Project: Many-to-Many
+
+2. The purpose of this project is to create a database which tracks Research Grants, Researchers receiving those Grants, and the Projects they are for. Creating a clear, simple database to compile this data was essential. 
+
+3. To do this, I implemented a strategy which cared about this simplistic mission which kept up with active Grants and Projects at the University to include further implementations if scaled. 
+
+Tradeoffs:
+
+1. Splitting the data into separate entities
+
+Doing this, by splitting the data into the separate entities of: Grant, Project, and Researcher ensures a design that reduces data redundancy and maintains data integrity. The downside to this is that this normalization complicates query logic and potentially impacts performance when retrieving combined data.
+
+2. Accurate Representation vs. Simplicity:
+
+Representing  relationships accurately, with a one-to-many link from Grant to Project and a many-to-many link between Researcher and Project, captures the real-world scenarios perfectly.  These projects are tied to single funding source while researchers are able  to contribute to multiple projects. The downside to this is that this design is inherently more complex compared to a simpler model that might embed researcher data directly into the project records for example. The added complexity may increase the difficulty of database maintenance and data handling at application-level.
+
+
+### Relation sets
+
+The following are the initial relation sets for the system:
+
+* GRANT( grant_id, funding_amount, sponsor_name )
+* RESEARCHER( researcher_id, name, department, contact_info )
+* PROJECT( project_id, title, start_date, grant_id )
+
+
+Here, grant_id is a foreign key referencing GRANT(grant_id).
+Relationship (Many-to-Many between RESEARCHER and PROJECT):
+
+Because a researcher may work on many projects and a project may involve many researchers, we introduce an associative relation:
+
+* WORKS_ON( researcher_id, project_id )
+
+The composite primary key is (researcher_id, project_id).
+researcher_id references RESEARCHER(researcher_id) and project_id references PROJECT(project_id).
+
+
+
+
+
+
+
+
+# README.md
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+
+
+
+
+
+
+# Reflection
+
+1. What do you find most difficult about the assignment?
+
+: The most difficult part about this assignment was learning Mermaid and Graphiz. Learning this notation was the most difficult as my time Quarto went smoothly after Homework 1. I found designing these models and implementing the creation of their graphs in Graphix and Mermaid. Outside of that, I do believe the rest of Homework 2 has gone smoothly. I enjoyed learning Mermaid and Graphix and getting more practice at designing ER diagrams for databases with different rules and restrictions. I believe this practice will go a long way toward the semester goal of designing a project of our own. 
+
+2. What do you find easiest about the assignment?
+
+
+: I found easiest about Homework 2 setting up the Report and understanding this time the Readme will be included in the document as I have kept the proper notation for its inclusion this time. I also found understanding the pace and workflow of this Homework to be in line with the first, so I will expect future homeworks to require substantial time coding or understanding the material, but not impossible either. 
+
+
+3. What did you learn that will name the next assignment easier?
+
+: I learned in this assignemnt to design ER Diagrams and to get more familiar with Database design or implementation. I also got more practice putting my ER Diagram in Chen's and Crows Foot Notation using Grahpix and Mermaid respectively. Getting more practice Relations Schema will also help me get rid of it as a barrier to understanding ER Diagramming with my increased fluency at it. I better learned implementation of ER Diagramming and the specific tradeoffs of ever design decision. Learning how to uniquely design of these scenarios gave me practice and increased my fluency at being able to implement a design.
+

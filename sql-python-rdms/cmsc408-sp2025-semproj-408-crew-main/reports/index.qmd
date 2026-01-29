@@ -1,0 +1,19 @@
+---
+title: Project documentation
+---
+
+(Write this QMD as if you are leaving breadcrumbs for next semesters students in CMSC 408.)
+
+(provide an overview of the project?)
+
+[Deliverable 4](deliverable-4.qmd) contains our original video pitch.
+
+[Deliverable 5](deliverable-5.qmd) is our design document.
+
+[Deliverable 7](deliverable-7.qmd) is the final project report
+
+
+(what is the name of your team? why did you pick it?)
+
+
+(feel free to make this really, really pretty!)

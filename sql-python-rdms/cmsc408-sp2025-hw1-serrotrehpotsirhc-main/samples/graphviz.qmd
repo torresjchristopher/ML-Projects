@@ -1,0 +1,36 @@
+---
+title: "Sample Horizontal Graphviz Diagram in Quarto"
+author: ChatGPT-4o with mods
+---
+
+This QMD file will render a horizontal flowchart using Graphviz when compiled with Quarto. You can experiment by adjusting the nodes, edges, and labels to customize your diagram further.
+
+
+# Experimenting with Horizontal Graphviz Diagrams
+
+This is a simple example of how to include a horizontally flowing Graphviz diagram in a Quarto document.
+
+```{dot}
+digraph G {
+    rankdir=LR;  // This sets the direction to Left-Right
+    graph [margin=0];
+    Start [shape=circle, label="Start"];
+    DoSomething [shape=box, label="Do Something"];
+    IsItDone [shape=diamond, label="Is it Done?"];
+    End [shape=ellipse, label="End"];
+
+    Start -> DoSomething;
+    DoSomething -> IsItDone;
+    IsItDone -> End [label="Yes"];
+    IsItDone -> DoSomething [label="No"];
+}
+
+```
+
+
+# Explanation
+
+- **Graph Direction**: The `rankdir=LR;` attribute sets the graph direction to flow from left to right.
+
+- **Node Shapes**: Different shapes like `circle`, `box`, `diamond`, and `ellipse` are used to represent different types of nodes.
+

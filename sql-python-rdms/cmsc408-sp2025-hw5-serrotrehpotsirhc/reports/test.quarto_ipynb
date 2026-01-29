@@ -1,0 +1,85 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: test\n",
+        "---"
+      ],
+      "id": "bce98c1c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper\n",
+        "\n",
+        "# Load these variables from .env file.\n",
+        "config_map = {\n",
+        "  'user': \"CMSC408_HW5_USER\",\n",
+        "  'password': \"CMSC408_HW5_PASSWORD\",\n",
+        "  'host': \"CMSC408_HW5_HOST\",\n",
+        "  'database': \"CMSC408_HW5_DB_NAME\"\n",
+        "}\n",
+        "\n",
+        "cnx,config = create_db_wrapper( config_map )"
+      ],
+      "id": "dd66cc96",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,\"\"\"\n",
+        "show databases\n",
+        "\"\"\")"
+      ],
+      "id": "15848772",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,\"\"\"\n",
+        "show tables\n",
+        "\"\"\")"
+      ],
+      "id": "98436b6c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,\"\"\"\n",
+        "select\n",
+        "  *\n",
+        "from\n",
+        "  countries\n",
+        "limit\n",
+        "  10\n",
+        "\"\"\")"
+      ],
+      "id": "d7919535",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

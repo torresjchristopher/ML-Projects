@@ -1,0 +1,150 @@
+---
+title: Example 1
+date: last-modified
+---
+
+## References
+
+### Displaying greek letters in quarto
+* <https://www.w3.org/TR/xml-entity-names/02A.html>
+* <https://www.classe.cornell.edu/~dms79/LectureNotes/formulae/list-of-math-symbols-extended.htm>
+* <https://www.rapidtables.com/code/text/unicode-characters.html>
+* <https://www.w3schools.com/charsets/ref_utf_math.asp>
+* <https://symbl.cc/en/unicode/blocks/miscellaneous-mathematical-symbols-a/#subblock-27D5>
+
+### Aligning equations in LaTeX
+* <https://latex-tutorial.com/align-equations/>
+
+### Quarto themes and layout
+* <https://quarto.org/docs/output-formats/html-themes.html>
+* advanced layout: <https://quarto.org/docs/authoring/article-layout.html>
+
+### Relational Algebra Study Guides
+* <https://towardsdatascience.com/a-quick-guide-to-relational-algebra-operators-in-dbms-1ff2ddecaad7>
+* <https://www.guru99.com/relational-algebra-dbms.html>
+
+## Symbol helpers
+
+Below are the principle unicode symbols and words used in relational algebra.  I expect that you'll use these in your own study guide:
+
+**Example set 1:** Selection: σ Projection: π Rename: ρ  Union: ∪  Intersection: ∩  Division: ÷  Join: ⨝  Left outer join: ⟕  Right outer join: ⟖  Full outer join: ⟗  Logical And: ∧  Logical Or: ∨  Cross product: ⨯
+
+**Example set 2:** Selection: $\sigma$ Projection: $\pi$ Rename: &rho;  Union: $\cup$  Intersection: $\cap$  Division: $\div$ Join: $\Join$  $\bowtie$ Left outer join: ⟕  Right outer join: ⟖  Full outer join: ⟗  Logical And: $\land$  Logical Or: $\lor$  Cross product: $\ltimes$
+
+* You can pick a symbol from the paragraph above and cut/paste it where you need it.
+* You can also find a copy of the character on the web and cut/paste it into your quarto document.
+* It might help to add a new extension:  "insert unicode". Open up extension tab on left and enter "insert unicode" in search bar.
+* ChatGPT can help, too.  You want characters that can print in HTML.
+
+## Unicode vs $\LaTeX$ format
+
+The quiz will display expressions in the *unicode* format, which looks more like regular text rather than $\LaTeX$ expressions.
+
+## Relations and relational algebra
+
+The example below is a sample table.  You might want to use this code in your study guide to create a table
+
+<table align="center">
+<tr><td padding="0px">
+### Relation $R$
+
+| A | B | C |
+|---|---|---|
+| 1 | 3 | 2 |
+| 2 | 2 | 1 |
+| 3 | 1 | 3 |
+| 4 | 4 | 4 |
+</td></tr></table>
+
+In the unicode format, rows are show in [ ... ], and columns are shown in { ... }.
+
+In the unicode format, the table above is written: { [1,3,2], [2,2,1], [3,1,3], [4,4,4] }
+
+In the unicode format, column B is shown as {3,2,1,4}  OR { [3],[2],[1],[4]}.
+
+In the unicode format, row 1 is shown as [1,3,2] and row 4 is shown as [4,4,4]
+
+## Example study guide table
+
+Here is another table using HTML inside a quarto QMD file.  In this table, I'm providing the symbol, what it does, and the answer as applied to the table above.
+
+In the table below, the *unicode style* represents what you'd see when taking the quiz.  Quizzes in Canvas use the *unicode* style.  The $LaTeX$ style is what you'd see in 
+textbooks.
+
+<style>
+    .col-12 {
+        vertical-align: top;
+        text-align: center;
+        width: 12%;
+    }
+    .col-28 {
+        vertical-align: top;
+        text-align: center;
+        width: 28%;
+    }
+    .col-desc {
+        vertical-align: top;
+        text-align: left;
+    }
+    .table-with-spacing {
+        border-collapse: separate; /* Ensures border-spacing works */
+        border-spacing: 0 25px; /* 0px horizontal and 15px vertical spacing between rows */
+        width: 100%; /* Optional: makes the table width full */
+        table-layout: fixed;
+        margin: 0 auto; /* Centers the table horizontally */
+    }
+    .with-border-bottom {
+        border-bottom: 2px solid black; /* Adds a horizontal line to the bottom */
+    }
+</style>
+
+By keeping the table below OUTSIDE of the standard *=html* quarto block, you can embed $\LaTeX$ letters and expressions
+within the table itself.  There should be NO BLANK LINES between any of the html elements, or it will display funny.
+
+
+<table class="table-with-spacing">
+    <tr>
+        <td class="col-12 with-border-bottom">
+            <strong>Operator</strong>
+        </td>
+        <td class="col-12 with-border-bottom">
+            <strong>$LaTeX$ style</strong>
+        </td>
+        <td class="col-12 with-border-bottom">
+            <strong>Unicode style</strong>
+        </td>
+        <td class="col-28 with-border-bottom">
+            <strong>Answer using sets above</strong>
+        </td>
+        <td class="col-desc with-border-bottom">
+            <strong>Description</strong>
+        </td>
+    </tr>
+    <tr>
+        <td class="col-12">Row/Col syntax</td>
+        <td class="col-12"></td>
+        <td class="col-12"></td>
+        <td class="col-28">{ [1,3,2], [2,2,1], [3,1,3], [4,4,4] }</td>
+        <td class="col-desc">The relation $R$ above written like this in *unicode* format</td>
+    </tr>
+    <tr>
+        <td class="col-12">Selection</td>
+        <td class="col-12">$\sigma_{B>2}R$</td>
+        <td class="col-12">&sigma; B>2 (R)</td>
+        <td class="col-28">{ [1,3,2],[4,4,4] }</td>
+        <td class="col-desc">The <em>selection</em> operator $\sigma$ is used to filter tuple from a relation.<br/>This example selects all rows where the value in the *B* column is greater than 2 from relation $R$ above.</td>
+    </tr>
+    <tr>
+        <td class="col-12">Projection</td>
+        <td class="col-12">$\pi_{A,C}R$</td>
+        <td class="col-12">&pi; A,C (R)</td>
+        <td class="col-28">{ [1,2],[2,1],[3,3],[4,4] }</td>
+        <td class="col-desc">The <em>projection</em> operator $\pi$ is used to filter columns from relation.<br/>
+        This example selects columns *A* and *C* from relation $R$ above.
+        </td>
+    </tr>
+</table>
+
+In the HTML code above, you can cut/page additional table rows to expand your study
+guide table.
+

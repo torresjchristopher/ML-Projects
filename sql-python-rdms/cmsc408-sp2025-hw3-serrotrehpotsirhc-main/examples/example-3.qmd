@@ -1,0 +1,68 @@
+---
+title: Example 3
+date: last-modified
+---
+
+
+## Pythagorean Theorem
+For a right triangle with legs $a$ and $b$, and hypotenuse $c$, the relationship is:
+
+$$
+a^2 + b^2 = c^2
+$$
+
+### Proof using the area of squares
+
+1. Consider a right triangle with legs $a$, $b$, and hypotenuse $c$.
+
+2. Create a square with side length $a + b$ that contains four copies of the triangle, arranged so that the hypotenuse forms a square in the middle.
+
+3. The area of the large square is:
+
+$$
+\text{Area of large square} = (a + b)^2
+$$
+
+4. Expanding this:
+
+$$
+(a + b)^2 = a^2 + 2ab + b^2
+$$
+
+5. The large square also contains four triangles, each with area:
+
+$$
+\text{Area of one triangle} = \frac{1}{2}ab
+$$
+
+Thus, the area of the four triangles is:
+
+$$
+4 \times \frac{1}{2}ab = 2ab
+$$
+
+6. The remaining area in the large square (after removing the triangles) is the area of the smaller square formed by the hypotenuse:
+
+$$
+\text{Area of small square} = c^2
+$$
+
+7. Therefore, the area of the large square can also be written as:
+
+$$
+\text{Area of large square} = c^2 + 2ab
+$$
+
+8. Setting the two expressions for the area of the large square equal:
+
+$$
+a^2 + 2ab + b^2 = c^2 + 2ab
+$$
+
+9. Subtract $2ab$ from both sides:
+
+$$
+a^2 + b^2 = c^2
+$$
+
+This proves the Pythagorean theorem!

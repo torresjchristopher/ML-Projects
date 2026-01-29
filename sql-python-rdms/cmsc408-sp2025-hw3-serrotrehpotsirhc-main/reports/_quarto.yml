@@ -1,0 +1,11 @@
+project:
+    type: default
+
+
+format:
+    html:
+        embed-resources: true
+        html-math-method: katex
+        theme: spacelab
+        toc: true
+

@@ -1,0 +1,300 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: Explore the mysql DBMS\n",
+        "---\n",
+        "\n",
+        "\n",
+        "Lots of moving parts in homework 5!  This is an exploration\n",
+        "HTML.  You should make sure that it runs without errors,\n",
+        "then review the output.  We'll also be reviewing the\n",
+        "output in class.\n",
+        "\n",
+        "Here is a helper website:\n",
+        "\n",
+        "* <https://vcu-ssg.github.io/ssg-quarto-python-setup/>\n",
+        "\n",
+        "Here are the tasks baked into this *qmd*.\n",
+        "\n",
+        "1. Install the necessary [python tools and libraries](https://vcu-ssg.github.io/ssg-quarto-python-setup/).\n",
+        "1. Verify that the tools and libraries are installed.\n",
+        "1. Verify that you can log into the phpMyAdmin site.\n",
+        "1. Verify that your computer can connect to the mySql server.\n",
+        "1. Explore queries and result sets using pandas\n",
+        "1. Explore Quarto as a tool for writing out tables.\n",
+        "1. Explore and document a new database that some provided to you.\n",
+        "\n",
+        "## Create database connection\n",
+        "\n",
+        "These are the python libraries that we'll be using in this exercise. I created the\n",
+        "*helpers.py* script to wrap the python guts to make it simpler to get started.\n",
+        "\n",
+        "You're welcome to code directly using the libraries, if you like!\n"
+      ],
+      "id": "6ebe7e09"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper\n",
+        "\n",
+        "# Load these variables from .env file.\n",
+        "config_map = {\n",
+        "  'user': \"CMSC408_HW5_USER\",\n",
+        "  'password': \"CMSC408_HW5_PASSWORD\",\n",
+        "  'host': \"CMSC408_HW5_HOST\",\n",
+        "  'database': \"CMSC408_HW5_DB_NAME\"\n",
+        "}\n",
+        "\n",
+        "cnx,config = create_db_wrapper( config_map )"
+      ],
+      "id": "1822caff",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## List databases that you can access\n"
+      ],
+      "id": "4fc40021"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,\"\"\"\n",
+        "show databases\n",
+        "\"\"\")"
+      ],
+      "id": "26777aaf",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In mysql, two databases are always available: *information_schema* and *performance_schema*.\n",
+        "\n",
+        "### *information schema* database\n",
+        "\n",
+        "The `information_schema` database in MySQL is a system database that contains metadata and information about the structure and configuration of all the other databases in a MySQL server instance. It does not store user data or application data; instead, it provides a way to query and retrieve information about the database objects and server settings.\n",
+        "\n",
+        "Here are some of the key purposes and features of the `information_schema` database:\n",
+        "\n",
+        "1. Schema Inspection: You can use the `information_schema` to retrieve information about database schemas, tables, columns, indexes, and other database objects. It's particularly useful for examining the structure of databases and tables without needing to access the actual data.\n",
+        "\n",
+        "2. Catalog of Database Objects: It acts as a catalog or data dictionary for the MySQL server, providing information about what databases and tables exist, their names, data types, constraints, and more.\n",
+        "\n",
+        "3. Metadata Queries: You can run SQL queries against the `information_schema` to obtain information about database objects and their properties. For example, you can find all tables in a database, get a list of columns in a table, or discover the indexes defined on a table.\n",
+        "\n",
+        "4. Database Administration: Database administrators can use the `information_schema` to monitor and manage database objects, track table sizes, or check for foreign key relationships.\n",
+        "\n",
+        "5. SQL Statement Generation: Developers and administrators often use the `information_schema` to generate SQL statements dynamically, such as generating SQL for table creation, alteration, or querying data based on the structure of the database.\n",
+        "\n",
+        "6. Security and Access Control: The `information_schema` can be used to inspect access privileges and permissions for users and roles, helping to manage security settings.\n",
+        "\n",
+        "7. Query Optimization: Some database tools and query optimizers use information from the `information_schema` to make better decisions about query execution plans.\n",
+        "\n",
+        "In summary, the `information_schema` database serves as a valuable tool for database administrators, developers, and tools to query and interact with metadata and configuration information about the MySQL server and its databases. It's an essential resource for tasks related to database introspection, schema management, and system administration.\n",
+        "The `performance_schema` database in MySQL is a system database that provides a wealth of information and statistics about the performance of various aspects of the MySQL server itself. It is designed to help database administrators and developers diagnose and optimize the performance of their MySQL server and the queries running on it.\n",
+        "\n",
+        "### *performance_schema* database\n",
+        "\n",
+        "Here are some of the key purposes and features of the `performance_schema`:\n",
+        "\n",
+        "1. Performance Monitoring: It collects detailed performance-related data about server activities, such as SQL statements, threads, and various internal events.\n",
+        "\n",
+        "2. Instrumentation: The `performance_schema` instruments various server components and operations, allowing you to see how resources are being used and which parts of the server are consuming the most CPU, memory, or other resources.\n",
+        "\n",
+        "3. Query Profiling: It can provide detailed information about SQL statements, including execution times, resource consumption, and query plans, helping you identify slow queries that need optimization.\n",
+        "\n",
+        "4. Wait Event Monitoring: It tracks the time spent waiting for various resources and conditions, which can help identify bottlenecks in your system.\n",
+        "\n",
+        "5. Resource Usage: It provides data on memory usage, I/O operations, and CPU usage for different server tasks, helping you understand resource consumption patterns.\n",
+        "\n",
+        "6. Locking and Contention: It helps you monitor and diagnose issues related to locks and contention, which can be crucial for applications with multiple concurrent users.\n",
+        "\n",
+        "7. User and Thread Statistics: You can get insights into the performance of user sessions and threads, which can help you manage connections efficiently.\n",
+        "\n",
+        "8. Configuration Tuning: The `performance_schema` can provide recommendations for tuning server configuration parameters based on the observed performance data.\n",
+        "\n",
+        "9. Security and Access Control: It can be used to monitor user activity and help audit database access.\n",
+        "\n",
+        "10. Compatibility: It is compatible with various monitoring and profiling tools and can be integrated with third-party performance analysis tools.\n",
+        "\n",
+        "To use the `performance_schema`, you typically write queries against its tables to retrieve performance-related data and gain insights into how your MySQL server is performing. Keep in mind that the `performance_schema` can consume some system resources, so it's important to use it judiciously and only enable the specific instrumentation you need for your performance analysis tasks.\n",
+        "\n",
+        "\n",
+        "## List tables in the current database\n",
+        "\n",
+        "When you established the connect, you set a default database.  The following sections\n",
+        "demonstrate how to list the tables in your schema/database.\n",
+        "\n",
+        "### List tables in your current database (option 1)\n",
+        "\n",
+        "This lists tables using the mysql-specific *show tables* command.\n"
+      ],
+      "id": "5e1a13b8"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,\"\"\"\n",
+        "show tables\n",
+        "\"\"\")"
+      ],
+      "id": "83bbeed9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## List tables in your current database (option 2)\n",
+        "\n",
+        "This code gets the table names from the *information_schema* database.\n"
+      ],
+      "id": "f71fd057"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,f\"\"\"\n",
+        "SELECT \n",
+        "  TABLE_SCHEMA, TABLE_NAME\n",
+        "FROM\n",
+        "  INFORMATION_SCHEMA.TABLES\n",
+        "WHERE\n",
+        "  TABLE_SCHEMA = '{config['database']}'\n",
+        "ORDER BY\n",
+        "  TABLE_NAME\n",
+        "\"\"\")"
+      ],
+      "id": "aa9861fc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Note that it's referencing the database name that was loaded from your *.env* file.\n",
+        "\n",
+        "## List tables in your current database (option 3)\n",
+        "\n",
+        "The *columns* table in your *INFORMATION_SCHEMA* provides details on all the columns\n",
+        "for all of the tables.  We can pull the table names from here, too.\n"
+      ],
+      "id": "6111e670"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,f\"\"\"\n",
+        "SELECT \n",
+        "  TABLE_NAME\n",
+        "FROM\n",
+        "  INFORMATION_SCHEMA.COLUMNS\n",
+        "WHERE\n",
+        "  1=1\n",
+        "  AND TABLE_SCHEMA = '{config['database']}'\n",
+        "GROUP BY\n",
+        "  TABLE_NAME\n",
+        "ORDER BY\n",
+        "  TABLE_NAME\n",
+        "\"\"\")"
+      ],
+      "id": "82395321",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Exploring the different tables in the *hr* database\n",
+        "\n",
+        "We can view the tables in our default database, that is, the one named in the connection\n",
+        "string using the `SHOW TABLES` command.\n",
+        "\n",
+        "## List all columns for all the tables in your current database \n"
+      ],
+      "id": "e133de25"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_html(cnx,f\"\"\"\n",
+        "SELECT \n",
+        "  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE\n",
+        "FROM\n",
+        "  INFORMATION_SCHEMA.COLUMNS\n",
+        "WHERE\n",
+        "  1=1\n",
+        "  AND TABLE_SCHEMA = '{config['database']}'\n",
+        "ORDER BY\n",
+        "  TABLE_NAME, ORDINAL_POSITION\n",
+        "\"\"\")"
+      ],
+      "id": "7a4d6f52",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "run_sql_and_return_df(cnx,f\"\"\"\n",
+        "SELECT \n",
+        "  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE\n",
+        "FROM\n",
+        "  INFORMATION_SCHEMA.COLUMNS\n",
+        "WHERE\n",
+        "  1=1\n",
+        "  AND TABLE_SCHEMA = '{config['database']}'\n",
+        "ORDER BY\n",
+        "  TABLE_NAME, ORDINAL_POSITION\n",
+        "\"\"\")"
+      ],
+      "id": "23c887b9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Next steps\n",
+        "\n",
+        "At this point, you're able to connect to a mysql DBMS and\n",
+        "navigate your way around.\n",
+        "\n",
+        "Head over to the *report.qmd* file to begin the assignment!"
+      ],
+      "id": "fa207116"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

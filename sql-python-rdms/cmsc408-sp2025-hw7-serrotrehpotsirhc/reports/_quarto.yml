@@ -1,0 +1,18 @@
+
+author:
+    - name: Christopher Torres
+      email: Torresc6@vcu.edu
+
+date: last-modified 4 - 9
+
+format:
+    html:
+        theme: cosmo
+        toc: true
+        embed-resources: true
+        code-copy: true
+
+execute:
+  kernel: cmsc408-hw7
+  echo: true
+  eval: true

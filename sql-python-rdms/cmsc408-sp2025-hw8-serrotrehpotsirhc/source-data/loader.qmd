@@ -1,0 +1,217 @@
+---
+title: Loader script for Homework 8
+author: John Leonard
+date: last-modified
+format:
+    html:
+        theme: cosmo
+        toc: true
+        embed-resources: true
+        code-copy: true
+execute:
+    cache: false
+    echo: true
+    eval: true
+---
+
+This report offers an example of a data pipeline embedded within a quarto file.
+
+# Data sources
+
+We'll be using data downloaded from the World Bank data catalog of [world development Indicators](https://datatopics.worldbank.org/world-development-indicators/).  Specifically, we'll be using the CSV files stored within this [ZIP file](https://databank.worldbank.org/data/download/WDI_CSV.zip).
+
+
+## Download and extract the data
+
+```{python}
+
+import requests
+import zipfile
+import io
+
+# URL of the zip file you want to download
+zip_file_url = "https://databank.worldbank.org/data/download/WDI_CSV.zip"
+files_to_extract = ['WDICountry.csv','WDISeries.csv','WDICSV.csv']
+target_directory = "."
+
+keep_going = False
+
+# Send an HTTP GET request to download the zip file
+response = requests.get(zip_file_url)
+
+# Check if the request was successful (status code 200)
+if response.status_code == 200:
+    # Create a BytesIO object from the response content
+    zip_data = io.BytesIO(response.content)
+    
+    # Create a ZipFile object
+    with zipfile.ZipFile(zip_data, "r") as zip_ref:
+
+        # Extract the needed files from the zip archive 
+        for file in files_to_extract:
+            zip_ref.extract(file,target_directory)
+    print("Zip file has been successfully downloaded and extracted.")
+    keep_going = True
+else:
+    print(f"Failed to download the zip file. Status code: {response.status_code}")
+
+```
+
+## Load CSV files into Pandas dataframe
+
+```{python}
+import pandas as pd
+
+# Load the CSV file into a Pandas DataFrame
+df_country = pd.read_csv("WDICountry.csv")
+df_series = pd.read_csv("WDISeries.csv")
+df_data = pd.read_csv("WDICSV.csv")
+
+```
+
+## Get database connection params from .env
+
+```{python}
+#| eval: true
+#| echo: false
+
+import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import SQLAlchemyError
+
+# modify config_map to reflect credentials needed by this program
+config_map = {
+    'user':'CMSC408_admin_user',
+    'password':'CMSC408_admin_pass',
+    'host':'CMSC408_admin_host',
+    'database':'CMSC408_world_bank_db'
+}
+# load and store credentials
+load_dotenv()
+config = {}
+for key in config_map.keys():
+    config[key] = os.getenv(config_map[key])
+flag = False
+for param in config.keys():
+    if config[param] is None:
+        flag = True
+        print(f"Missing {config_map[param]} in .env file")
+#if flag:
+#    sys.exit(1)
+```
+
+## Create database connection
+
+```{python}
+#| eval: true
+#| echo: false
+
+
+# build a sqlalchemy engine string
+engine_uri = f"mysql+pymysql://{config['user']}:{config['password']}@{config['host']}/{config['database']}"
+
+# create a database connection.  THIS IS THE ACTUAL CONNECTION!
+try:
+    cnx = create_engine(engine_uri,pool_size=20,max_overflow=1000)
+except ArgumentError as e:
+    print(f"create_engine: Argument Error: {e}")
+    #sys.exit(1)
+except NoSuchModuleError as e:
+    print(f"create_engine: No Such Module Error: {e}")
+    #sys.exit(1)
+except Exception as e:
+    print(f"create_engine: An error occurred: {e}")
+    #sys.exit(1)
+```
+
+## Test connection by reading tables in DB
+
+```{python}
+#| echo: false
+#| eval: true
+
+
+# Do a quick test of the connection and trap the errors better!
+try:
+    tables = pd.read_sql("show tables",cnx)
+    print(tables)
+except ImportError as e:
+    print(f"Error: {e}")
+except OperationalError as e:
+    print(f"Database/SQL Error:\n{str(e)}\n")
+except ProgrammingError as e:
+    print(f"Programming Error:\n{str(e)}\n")
+except Exception as e:
+    print(f"An error occurred:\n{str(e)}\n")
+
+```
+
+## Store dataframes into mySQL DB
+
+### Storing WDI Country
+
+```{python}
+
+df_country.to_sql("wdi_country", cnx, if_exists="replace", index=False)
+
+```
+
+### Storing WDI Series
+```{python}
+
+df_series.to_sql("wdi_series", cnx, if_exists="replace", index=False)
+
+```
+
+### Storing WDI Data
+
+```{python}
+
+df_data.to_sql("wdi_data", cnx, if_exists="replace", index=False)
+
+```
+
+## Grant permissions for other to access
+
+### Build a list of users and tables
+
+```{python}
+
+result = cnx.connect().execute(text(f"""
+with users_cti as (
+select user,host from mysql.user where user like 'sp25_%' and not user like '%_group%'
+), tables_cti as (
+SELECT 'wdi_country' AS table_name
+UNION
+SELECT 'wdi_series'
+UNION
+SELECT 'wdi_data'
+)
+select
+  concat("grant select on {config["database"]}.",table_name," to '",user,"'@'",host,"'; ")
+from 
+  users_cti,tables_cti
+"""))
+
+cmds = []
+for row in result:
+    cmds.append(row[0])
+    cmds.append("flush privileges;")
+```
+
+### Run grant commands
+
+```{python}
+#! echo: false
+
+try:
+    for i,cmd in enumerate(cmds):
+        query = text(cmd)
+        result = cnx.connect().execute(query)
+        print(f"OK ({i:4}): {query}")
+#        cnx.dispose()
+except Exception as e:
+    print(f"An error occurred:\n{str(e)}\nERR({i:4}) {query}\n")
+
+```

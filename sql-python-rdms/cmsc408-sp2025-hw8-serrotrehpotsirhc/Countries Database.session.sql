@@ -1,0 +1,1 @@
+DESCRIBE wdi_country;

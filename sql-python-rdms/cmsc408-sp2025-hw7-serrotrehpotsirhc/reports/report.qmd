@@ -1,0 +1,331 @@
+---
+title: Homework 7 - More on joins
+
+
+
+---
+
+Last week, we worked with setting up a database. For this assignment, we are going to take that one step further and add in a few more tables to give us more practice working with join statements inside of SQL!
+
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw7-serrotrehpotsirhc.git>
+
+```{python}
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW6_USER",
+  'password': "CMSC408_HW6_PASSWORD",
+  'host': "CMSC408_HW6_HOST",
+  'database': "CMSC408_HW6_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+  
+```
+
+## Overview and description
+
+The database will represent a company-wide resume, capturing the collective skills and certifications of all the people in your company. The database will capture skills, employees and their roles within the company. The database will help our employer find employees with specific skills, list the skills of any employee and help find gaps in the skill sets of employees in specific roles.
+
+## Crows-foot diagram
+
+This is the Crows Foot diagram for this database. People have skills. People can have many skills, and skills can each have many people. Both People and Skills are each One to Many toward each other, making both Many to Many.
+
+```{mermaid}
+%%| echo: false
+erDiagram
+    people ||--o{ peopleskills : has
+    skills ||--o{ peopleskills : includes
+
+    people {
+        int id PK
+        string first_name
+        string last_name
+        string email
+        string linkedin_url
+        string headshot_url
+        string discord_handle
+        string brief_bio
+        date date_joined
+    }
+
+    skills {
+        int id PK
+        string name
+        string description
+        string tag
+        string url
+        string extra
+    }
+
+    peopleskills {
+        int id PK
+        int skills_id FK
+        int people_id FK
+        datetime date_acquired
+    }
+
+```
+## Loading the database
+
+```{python}
+#| output: asis
+
+ddl_file_name = "./my-ddl.sql"
+messages,errors = execute_ddl_from_file( ddl_file_name, cnx)
+
+if errors:
+    for error in errors:
+        print(f"{error}<br/>")
+else:
+    print(f"No errors detected while loading: {ddl_file_name}")
+```
+
+
+## Examples of data in the database
+
+The following sections provide an overview of the schema including table names, and number of rows and columns in each table.
+
+For the people, skills, and roles tables, a description of each table is presented along with it's contents.
+
+### Tables and metrics in the database
+
+```{python}
+#| echo: false
+
+# Get table names and column counts
+col_df = run_sql_and_return_df(cnx,"""
+    SELECT table_name as "table_name", COUNT(*) AS column_count
+    FROM information_schema.columns
+    WHERE table_schema = DATABASE()
+    GROUP BY table_name;
+""")
+
+# Build dynamic row count queries using the table list
+col_df['count_query'] = col_df['table_name'].apply(
+    lambda name: f"SELECT '{name}' AS table_name, COUNT(*) AS row_count FROM `{name}`"
+)
+
+# Combine the queries into a single UNION ALL
+full_query = "\nUNION ALL\n".join(col_df['count_query'].tolist())
+
+# Execute the UNION ALL query to get row counts
+row_df = run_sql_and_return_df(cnx,full_query)
+
+import pandas as pd
+
+# Merge with column counts
+summary_df = pd.merge(row_df, col_df[['table_name', 'column_count']], on='table_name')
+
+summary_df
+
+```
+
+### People table
+
+The *people* table contains a SQL Select call to print the entire people table, using the *.
+
+Below is a list of data in the *people* table.
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from people;
+""" )
+```
+
+### Skills table
+
+The *skills* table contains a SQL Select call to print the entire skills table, using the *.
+
+Below is a list of data in the *skills* table.
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from skills;
+""" )
+```
+
+### Roles table
+
+The *roles* table contains the roles of each employee, which are defined in our MY-DL.SQl File. To call all of these roles for this python snippet, we wil use a select call with an * to print ALL the roles inside the table!
+
+Below is a list of data in the *roles* table.
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from roles;
+""" )
+```
+
+## Sample queries
+
+### List skill names of Person 5
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT s.name
+FROM skills s
+JOIN peopleskills ps ON s.id = ps.skills_id
+WHERE ps.people_id = 5;
+""" )
+```
+
+### List people with Skill 2
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT p.first_name, p.last_name
+FROM people p
+JOIN peopleskills ps ON p.id = ps.people_id
+WHERE ps.skills_id = 2;
+""" )
+```
+
+### List people with a DEVELOPER role
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+       r.name AS role_name
+FROM peopleroles pr
+JOIN roles r ON pr.role_id = r.id
+JOIN people p ON pr.people_id = p.id
+WHERE r.name = 'Developer';
+""" )
+```
+
+### List names and email addresses of people without skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT p.first_name, p.last_name, p.email
+FROM people p
+LEFT JOIN peopleskills ps ON p.id = ps.people_id
+WHERE ps.skills_id IS NULL;
+""" )
+```
+
+### List names and tags of unused skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT s.name, s.tag
+FROM skills s
+LEFT JOIN peopleskills ps ON s.id = ps.skills_id
+WHERE ps.people_id IS NULL;
+""" )
+```
+
+### List people names and skill names with the BOSS role
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+       s.name AS skill_name,
+       r.name AS role_name
+FROM peopleroles pr
+JOIN roles r ON pr.role_id = r.id
+JOIN people p ON pr.people_id = p.id
+JOIN peopleskills ps ON ps.people_id = p.id
+JOIN skills s ON s.id = ps.skills_id
+WHERE r.name = 'Boss';
+""" )
+```
+
+### List ids and names of unused roles
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT r.id, r.name
+FROM roles r
+LEFT JOIN peopleroles pr ON r.id = pr.role_id
+WHERE pr.people_id IS NULL;
+""" )
+```
+
+### List people and the number of skills they have acquired.
+
+(Goal: Practice JOIN, GROUP BY, and COUNT())
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT
+  p.id AS person_id,
+  CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+  COUNT(ps.skills_id) AS skill_count
+FROM
+  people p
+  LEFT JOIN peopleskills ps ON p.id = ps.people_id
+GROUP BY
+  p.id, p.first_name, p.last_name
+ORDER BY
+  skill_count DESC, person_name;
+""" )
+```
+
+### List each skill and the number of people who have acquired it.
+
+(Goal: Practice JOIN, GROUP BY, COUNT())
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT
+  skills.tag,
+  COUNT(peopleskills.skills_id)
+FROM
+  skills
+    left join peopleskills
+      on (skills.id=peopleskills.skills_id)
+GROUP BY
+  skills.tag
+ORDER BY
+  COUNT(peopleskills.skills_id) DESC
+""" )
+```
+
+### List all people who have acquired more than 2 skills
+
+(Goal: Join through multiple tables and use HAVING)
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+SELECT
+  p.id AS person_id,
+  CONCAT(p.first_name, ' ', p.last_name) AS person_name,
+  COUNT(ps.skills_id) AS skill_count
+FROM
+  people p
+  JOIN peopleskills ps ON p.id = ps.people_id
+GROUP BY
+  p.id, p.first_name, p.last_name
+HAVING
+  COUNT(ps.skills_id) > 2
+ORDER BY
+  skill_count DESC, person_name;
+""" )
+```
+
+## Reflection
+
+What did you like most about this project?
+: This project retained the architecture of Homework 6, so it was easy to get started, and I was less worried about trying to get everything working this time around. I wish more assignments were like this, instead of every assignment being daunting just to get up and running. By eliminating this step, I was actually able to focus on the work and apply concepts from class!
+
+What was most challenging about this project?
+: Very little difficulty here. Logically working through how to define and populate the roles table, but that was straightforward from Homework 6. The python code in Report.QMD was difficult at first. It was more conceptualizing what tables I needed to join rather than simply implementing it! 
+
+What would you do different next time?
+: Not much! I love watching the lectures! I would probably run through a few more problem sets of this code. There should be a website graded for completion which generates SQL commands, where you can go through a bunch of implementation problems without worrying about your entire program not running or whatnot! This would isolate the skills of SQL without causing the stress of worrying that a mistake in code will be the reason the entire program doesn't work! Over time, you would get better at SQL and be confident enough to work through implementation issues!
+
+
+# README
+
+Below is the README from my project.
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+

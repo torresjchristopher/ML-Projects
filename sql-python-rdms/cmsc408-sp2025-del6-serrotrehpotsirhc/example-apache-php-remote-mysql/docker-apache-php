@@ -1,0 +1,11 @@
+# Dockerfile
+FROM php:7.4-apache
+
+# Enable the mysqli extension for MySQL connections
+RUN docker-php-ext-install mysqli
+
+# Copy your PHP files to the Apache document root
+#COPY ./site/ /var/www/html/
+
+# Expose port 80
+EXPOSE 80

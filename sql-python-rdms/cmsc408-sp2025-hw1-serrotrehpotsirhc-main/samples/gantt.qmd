@@ -1,0 +1,39 @@
+---
+title: "Sample Gantt Chart with Mermaid in Quarto"
+author: ChatGPT-4o with mods
+---
+
+When you compile this QMD file with Quarto, it will render a Gantt chart showing the project timeline. You can customize the tasks, dates, and durations to match your specific project.
+
+See <https://mermaid.js.org/syntax/gantt.html> to learn more!
+
+# Experimenting with Gantt Charts
+
+This is an example of how to create a Gantt chart using Mermaid in a Quarto document.
+
+```{mermaid}
+gantt
+    title Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Task A            :a1, 2025-01-13, 10d
+    Task B            :b, after a1, 7d
+    section Phase 2
+    Task C            :c, after b, 10d
+    Task D            :d, after c, 5d
+    section Phase 3
+    Task E            :e, after b, 12d
+    Task F            :f, after e, 7d
+```
+
+
+### Explanation
+
+- **Gantt Chart Basics**: The `gantt` keyword starts the Gantt chart definition.
+
+- **Title and Date Format**: `title` sets the title of the chart, and `dateFormat` defines the date format used.
+
+- **Sections**: The `section` keyword creates different phases or sections within the Gantt chart.
+
+- **Tasks**: Each task is defined with a label, start date, and duration (e.g., `10d` for 10 days). The `after` keyword allows tasks to start after others.
+

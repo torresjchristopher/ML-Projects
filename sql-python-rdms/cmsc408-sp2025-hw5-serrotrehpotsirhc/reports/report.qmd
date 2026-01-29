@@ -1,0 +1,789 @@
+---
+title: Homework 5 - Documenting an HR database
+
+
+
+---
+
+Thank you for hiring me to take on this role of working directly on you database! After having received credentials to the HR database, I am ready to start revising it to better fit our needs! In this report, I am going to create:
+
+1. A general written description of contents of database.
+
+2. A Chen diagram highlighting the major entities and relations.
+
+3. A Crows-foot diagram highlighting the entities, attributes, and the cardinality and participation of the relations.
+
+4. A python-generated listing of SQL tables and fields, and a listing of sample data showing the first bunch (5 or 10 or so) of EACH table.
+
+5. A HTML report, which will be uploaded to canvas.
+
+**Github repo:** <https://github.com/cmsc-vcu/cmsc408-sp2025-hw5-serrotrehpotsirhc.git>
+
+
+# Database design
+
+The following sections document the general design of the HR database.
+
+## General description
+
+This database represents the Human Resources of the fortune company I have been hired by! There are multiple sections of data for each employee managed by HR. These sections include:
+
+1. Countries
+2. Departments
+3. Employees
+4. Emp_details_view
+5. Jobs
+6. Job_grades
+7. Job_history
+8. Locations
+9. Regions.
+
+The purpose of this database is to manage each employee and their relevant data. The major tables are listed above. 
+
+## Employee-Related Relationships
+
+Employees belong to departments.
+
+Employees have job titles.
+
+Employees have managers (who are also employees).
+
+Employees have a salary and some have commission percentages.
+
+Employees have a work history, including past positions and departments.
+
+## Department-Related Relationships
+
+Departments have managers (who are employees).
+
+Departments are associated with specific locations.
+
+## Location-Related Relationships
+
+Locations are in cities and countries.
+
+Countries belong to regions.
+
+## Job-Related Relationships
+
+Jobs have specific salary ranges (minimum and maximum).
+
+Jobs are categorized into grade levels based on salary ranges.
+
+## Hierarchical Relationships
+
+Regions contain countries.
+
+Countries contain locations.
+
+Locations house departments.
+
+Departments employ workers.
+
+Employees have managers, creating a reporting structure.
+
+The purpose of this database is to manage its employees and store their relevant data. 
+
+## Employee-Related Tables
+
+### Employees Table
+
+Stores data of employees, including:
+
+1. Employee ID
+
+2. First and last name
+
+3. Email and phone number
+
+4. Hire date
+
+5. Job ID
+
+6. Salary and commission percentage
+
+7. Manager ID
+
+8. Department ID
+
+### Dependents Table
+
+Stores information about employees' dependents
+
+### Job-Related Tables
+Jobs Table
+
+Stores job data, including:
+
+1. Job ID
+
+2. Job title
+
+3. Minimum and maximum salary for each position
+
+4. Job History Table
+
+5. Records employees' job history, including:
+
+6. Employee ID
+
+7. Start and end dates
+
+8. Job ID
+
+9. Department ID
+
+10. Job Grades Table
+
+11. Contains information about salary grades:
+
+12. Grade level
+
+13. Lowest and highest salary for each grade
+
+## Organizational Structure Tables
+### Departments Table
+
+Stores department data:
+
+1. Department ID
+
+2. Department name
+
+3. Manager ID
+
+4. Location ID
+
+## Locations Table
+
+Stores the location of company departments:
+
+1. Location ID
+
+2. Street address
+
+3. Postal code
+
+4. City
+
+5. State/Province
+
+6. Country ID
+
+## Countries Table
+
+Stores data of countries where the company operates:
+
+1. Country ID
+
+2. Country name
+
+3. Region ID
+
+## Regions Table
+
+Stores data of regions:
+
+1. Region ID
+
+2. Region name 
+
+
+
+## Chen diagram
+
+The following diagram highlights the major relations in the database.
+
+
+
+```{dot}
+graph ER {
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=30;
+    bgcolor=transparent;
+
+    layout=neato  
+    scale=1.2     
+
+    node [fontname="Helvetica,Arial,sans-serif",fontsize=10]
+
+    // Define nodes
+    node [shape=box];
+    employee; department; job; job_history; job_grade; location; country; region;
+    
+    node [shape=ellipse];
+    employee_id; first_name; last_name; email; phone_number; hire_date; job_id; salary; commission_pct; manager_id; department_id;
+    department_id; department_name; location_id; manager_id;
+    job_id; job_title; min_salary; max_salary;
+    grade_level; lowest_sal; highest_sal;
+    location_id; street_address; postal_code; city; state_province; country_id;
+    country_id; country_name; region_id;
+    region_id; region_name;
+
+    
+    node [shape=diamond,style=filled,color=lightgrey]; 
+    "Works_In"; "Located_In"; "Part_Of"; "Has_Job"; "History"; "Graded";
+
+    // Define edges
+    employee -- employee_id;
+    employee -- first_name;
+    employee -- last_name;
+    employee -- email;
+    employee -- phone_number;
+    employee -- hire_date;
+    employee -- job_id;
+    employee -- salary;
+    employee -- commission_pct;
+    employee -- manager_id;
+    employee -- department_id;
+    employee -- "Works_In" [label="m"];
+    "Works_In" -- department [label="1"];
+
+    department -- department_id;
+    department -- department_name;
+    department -- location_id;
+    department -- manager_id;
+    department -- "Located_In" [label="1"];
+    "Located_In" -- location [label="1"];
+
+    location -- location_id;
+    location -- street_address;
+    location -- postal_code;
+    location -- city;
+    location -- state_province;
+    location -- country_id;
+    location -- "Part_Of" [label="1"];
+    "Part_Of" -- country [label="1"];
+
+    country -- country_id;
+    country -- country_name;
+    country -- region_id;
+
+    country -- "Part_Of" [label="1"];
+    "Part_Of" -- region [label="1"];
+    
+    region -- region_id;
+    region -- region_name;
+
+    employee -- "Has_Job" [label="1"];
+    "Has_Job" -- job [label="1"];
+
+    job -- job_id;
+    job -- job_title;
+    job -- min_salary;
+    job -- max_salary;
+    job -- "Graded" [label="1"];
+    "Graded" -- job_grade [label="1"];
+
+    job_grade -- grade_level;
+    job_grade -- lowest_sal;
+    job_grade -- highest_sal;
+
+    employee -- "History" [label="m"];
+    "History" -- job_history [label="1"];
+
+    job_history -- job_id;
+    job_history -- department_id;
+    job_history -- employee_id;
+    job_history -- start_date;
+    job_history -- end_date;
+}
+```
+
+
+
+## Crows foot diagram
+
+The following diagram provides greater detail on the entities and attributes and highlights the cardinality and participation of the relations.
+
+```{mermaid}
+erDiagram
+    EMPLOYEE {
+        int employeeID
+        string first_name
+        string last_name
+        string email
+        string phone_number
+        date hire_date
+        int salary
+        float commission_pct
+    }
+    
+    DEPARTMENT {
+        int departmentID
+        string department_name
+    }
+    
+    JOB {
+        int jobID
+        string job_title
+        int min_salary
+        int max_salary
+    }
+    
+    JOB_GRADE {
+        string job_grade_level
+        int lowest_sal
+        int highest_sal
+    }
+    
+    JOB_HISTORY {
+        int jobID
+        int departmentID
+        date start_date
+        date end_date
+    }
+    
+    LOCATION {
+        int locationID
+        string street_address
+        string postal_code
+        string city
+        string state_province
+    }
+    
+    COUNTRY {
+        string countryID
+        string country_name
+    }
+    
+    REGION {
+        int regionID
+        string region_name
+    }
+    
+    EMPLOYEE ||--o{ DEPARTMENT : works_in
+    DEPARTMENT ||--o{ LOCATION : located_in
+    LOCATION ||--o{ COUNTRY : part_of
+    COUNTRY ||--o{ REGION : part_of
+    EMPLOYEE ||--|| JOB : has
+    JOB ||--o{ JOB_GRADE : graded
+    EMPLOYEE ||--o{ JOB_HISTORY : history
+```
+
+
+
+
+
+
+## Listing of tables in the database
+
+The following python blocks highlight the steps used to document the tables in the database.  The code is left in the report to show how fun it was to write python!
+
+### Create connection
+
+Creating a connection to the "HR" database. This section of code:
+
+1. Interprets the .env file to locate each key
+2. Imports the necessary helper packages
+3. Saves each of the keys to the config_map
+4. Uses the config_map as a key to set up the server using its 4 variables 
+
+Feel free to explore the python in the *helpers.py* file.
+
+```{python}
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper
+# load credentials from .env file
+# load_dotenv()
+# Load these variables from first .env file found.
+config_map = {
+  'user': "CMSC408_HW5_USER",
+  'password': "CMSC408_HW5_PASSWORD",
+  'host': "CMSC408_HW5_HOST",
+  'database': "CMSC408_HW5_DB_NAME"
+}
+
+cnx, config = create_db_wrapper( config_map )
+
+```
+
+
+### List of tables found in HR database
+
+We took this piece of code from explore.qmd, which selects the table name and type using SQL from the information schema tables of our HR database. Printing each table!
+
+```{python}
+run_sql_and_return_df(cnx,"""
+SELECT 
+  TABLE_NAME, TABLE_TYPE
+FROM
+  INFORMATION_SCHEMA.TABLES
+WHERE
+  TABLE_SCHEMA = 'sp25_torresc6_hr'
+ORDER BY
+  TABLE_NAME
+""")
+```
+
+
+# Listing of Tables and sample data
+
+The following sections provide a high-level view of the data found in the HR database.
+
+Here, we not only print the tables, we also print their data! Similar to the code block above, we select table name, but this time we also select position, column name, and column type! This will help us display not only each table, but alos each column or subcategory as well! 
+
+For example, the Countries table has the ids of: country_id, country_name, and region_id, each with separate data under their respective columns! This code prints these column names!
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE
+FROM
+  INFORMATION_SCHEMA.COLUMNS
+WHERE
+  1=1
+  AND TABLE_SCHEMA = '{config['database']}'
+ORDER BY
+  TABLE_NAME, ORDINAL_POSITION
+""")
+```
+
+```{python}
+run_sql_and_return_df(cnx,f"""
+SELECT 
+  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE
+FROM
+  INFORMATION_SCHEMA.COLUMNS
+WHERE
+  1=1
+  AND TABLE_SCHEMA = '{config['database']}'
+ORDER BY
+  TABLE_NAME, ORDINAL_POSITION
+""")
+```
+
+
+## Table: countries
+
+The *counties* table contains data about the locations of the various offices and departments of the company.
+
+### Schema: countries
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+        COLUMN_NAME, 
+        DATA_TYPE, 
+        CHARACTER_MAXIMUM_LENGTH, 
+        IS_NULLABLE,
+        COLUMN_KEY
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'countries' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: countries
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT
+        country_id,
+        country_name,
+        region_id
+    FROM
+        countries;
+""")
+```
+
+
+## Table: departments
+
+The *departments* table contains ...
+
+### Schema: departments
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'departments' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: departments
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+department_id, department_name, manager_id, location_id 
+
+FROM
+
+departments;
+""")
+```
+
+
+
+## Table: employees
+
+The *employees* table contains ...
+
+### Schema: employees
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'employees' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: employees
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id 
+
+FROM employees;
+""")
+```
+
+
+## Table: jobs
+
+The *jobs* table contains ...
+
+### Schema: jobs
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'jobs' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: jobs
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+job_id, job_title, min_salary, max_salary 
+
+FROM jobs;
+""")
+```
+
+
+
+
+## Table: job_grades
+
+The *job_grades* table contains ...
+
+### Schema: job_grades
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'job_grades' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: job_grades
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+grade_level, lowest_sal, highest_sal
+
+FROM job_grades;
+""")
+```
+
+
+
+
+## Table: job_history
+
+The *job_history* table contains ...
+
+### Schema: job_history
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'job_history' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+
+### Sample data: job_history
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+employee_id, start_date, end_date, job_id, department_id
+ 
+FROM job_history;
+""")
+```
+
+
+
+## Table: locations
+
+The *locations* table contains ...
+
+### Schema: locations
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'locations' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: locations
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+location_id, street_address, postal_code, city, state_province, country_id 
+ 
+FROM locations;
+""")
+```
+
+## Table: regions
+
+The *regions* table contains ...
+
+### Schema: regions
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'regions' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: regions
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+region_id, region_name
+ 
+FROM regions;
+""")
+```
+
+
+## Table: emp_details_view
+
+The *emp_details_view* table contains ...
+
+### Schema: emp_details_view
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+            COLUMN_NAME, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            IS_NULLABLE,
+            COLUMN_KEY
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = 'emp_details_view' AND TABLE_SCHEMA = 'sp25_torresc6_hr';
+""")
+```
+
+### Sample data: emp_details_view
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+
+employee_id, job_id, manager_id, department_id, location_id, country_id, first_name, last_name, salary, commission_pct, department_name, job_title, city, state_province, country_name, region_name 
+
+FROM
+
+emp_details_view
+
+""")
+```
+
+
+# Reflection
+
+
+Please add a paragraph or two about how this project went.
+: At first it was really daunting, all of the installing. I have like computer science PTSD when it comes to making sure everything is installed the right way! It has always been one of the most frusturating parts for no reason! Making sure everything is installed correctly just for it to work is the last thing I should be worrying about! However, it does show a mastery in systems to be able to move through one efficiently and understand why it works the way it does. Having a mastery in 
+
+
+Was it harder or easier than you expected?
+: It was about as difficult as I expected. Professor said this assigment was going to be slightly trickier, so I took my time. It was relatively difficult, but I have finished all components. Just took a lot of debugging and time. 
+
+Did the instructor provide too much information or not enough information?
+: The instructor provided the perfect information! However, at the end, I still had to install a few more modules, and there was one grammatical error in helpers.py. These things could throw someone off, and it might send them back to the tutorial instead of realizing these errors are quick fixes. Maybe pandas is installed on other systems automatically though. 
+
+Do you have suggestions for how it can be improved?
+: As I said right above. There is one grammatical error in helpers.py and there could be a clarification that the user might need to download separately a few modules. I know we had to avoid using pip earlier, so all of this could be confusing. Otherwise, perfect instruction! The .env could also be mentioned as needing to be edited.
+
+
+
+
+
+
+# README
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::

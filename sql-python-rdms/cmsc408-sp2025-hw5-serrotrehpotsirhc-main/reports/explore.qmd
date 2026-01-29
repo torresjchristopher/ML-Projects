@@ -1,0 +1,204 @@
+---
+title: Explore the mysql DBMS
+---
+
+Lots of moving parts in homework 5!  This is an exploration
+HTML.  You should make sure that it runs without errors,
+then review the output.  We'll also be reviewing the
+output in class.
+
+Here is a helper website:
+
+* <https://vcu-ssg.github.io/ssg-quarto-python-setup/>
+
+Here are the tasks baked into this *qmd*.
+
+1. Install the necessary [python tools and libraries](https://vcu-ssg.github.io/ssg-quarto-python-setup/).
+1. Verify that the tools and libraries are installed.
+1. Verify that you can log into the phpMyAdmin site.
+1. Verify that your computer can connect to the mySql server.
+1. Explore queries and result sets using pandas
+1. Explore Quarto as a tool for writing out tables.
+1. Explore and document a new database that some provided to you.
+
+## Create database connection
+
+These are the python libraries that we'll be using in this exercise. I created the
+*helpers.py* script to wrap the python guts to make it simpler to get started.
+
+You're welcome to code directly using the libraries, if you like!
+
+```{python}
+#| echo: false
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW5_USER",
+  'password': "CMSC408_HW5_PASSWORD",
+  'host': "CMSC408_HW5_HOST",
+  'database': "CMSC408_HW5_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+```
+
+## List databases that you can access
+
+```{python}
+run_sql_and_return_html(cnx,"""
+show databases
+""")
+```
+
+In mysql, two databases are always available: *information_schema* and *performance_schema*.
+
+### *information schema* database
+
+The `information_schema` database in MySQL is a system database that contains metadata and information about the structure and configuration of all the other databases in a MySQL server instance. It does not store user data or application data; instead, it provides a way to query and retrieve information about the database objects and server settings.
+
+Here are some of the key purposes and features of the `information_schema` database:
+
+1. Schema Inspection: You can use the `information_schema` to retrieve information about database schemas, tables, columns, indexes, and other database objects. It's particularly useful for examining the structure of databases and tables without needing to access the actual data.
+
+2. Catalog of Database Objects: It acts as a catalog or data dictionary for the MySQL server, providing information about what databases and tables exist, their names, data types, constraints, and more.
+
+3. Metadata Queries: You can run SQL queries against the `information_schema` to obtain information about database objects and their properties. For example, you can find all tables in a database, get a list of columns in a table, or discover the indexes defined on a table.
+
+4. Database Administration: Database administrators can use the `information_schema` to monitor and manage database objects, track table sizes, or check for foreign key relationships.
+
+5. SQL Statement Generation: Developers and administrators often use the `information_schema` to generate SQL statements dynamically, such as generating SQL for table creation, alteration, or querying data based on the structure of the database.
+
+6. Security and Access Control: The `information_schema` can be used to inspect access privileges and permissions for users and roles, helping to manage security settings.
+
+7. Query Optimization: Some database tools and query optimizers use information from the `information_schema` to make better decisions about query execution plans.
+
+In summary, the `information_schema` database serves as a valuable tool for database administrators, developers, and tools to query and interact with metadata and configuration information about the MySQL server and its databases. It's an essential resource for tasks related to database introspection, schema management, and system administration.
+The `performance_schema` database in MySQL is a system database that provides a wealth of information and statistics about the performance of various aspects of the MySQL server itself. It is designed to help database administrators and developers diagnose and optimize the performance of their MySQL server and the queries running on it.
+
+### *performance_schema* database
+
+Here are some of the key purposes and features of the `performance_schema`:
+
+1. Performance Monitoring: It collects detailed performance-related data about server activities, such as SQL statements, threads, and various internal events.
+
+2. Instrumentation: The `performance_schema` instruments various server components and operations, allowing you to see how resources are being used and which parts of the server are consuming the most CPU, memory, or other resources.
+
+3. Query Profiling: It can provide detailed information about SQL statements, including execution times, resource consumption, and query plans, helping you identify slow queries that need optimization.
+
+4. Wait Event Monitoring: It tracks the time spent waiting for various resources and conditions, which can help identify bottlenecks in your system.
+
+5. Resource Usage: It provides data on memory usage, I/O operations, and CPU usage for different server tasks, helping you understand resource consumption patterns.
+
+6. Locking and Contention: It helps you monitor and diagnose issues related to locks and contention, which can be crucial for applications with multiple concurrent users.
+
+7. User and Thread Statistics: You can get insights into the performance of user sessions and threads, which can help you manage connections efficiently.
+
+8. Configuration Tuning: The `performance_schema` can provide recommendations for tuning server configuration parameters based on the observed performance data.
+
+9. Security and Access Control: It can be used to monitor user activity and help audit database access.
+
+10. Compatibility: It is compatible with various monitoring and profiling tools and can be integrated with third-party performance analysis tools.
+
+To use the `performance_schema`, you typically write queries against its tables to retrieve performance-related data and gain insights into how your MySQL server is performing. Keep in mind that the `performance_schema` can consume some system resources, so it's important to use it judiciously and only enable the specific instrumentation you need for your performance analysis tasks.
+
+
+## List tables in the current database
+
+When you established the connect, you set a default database.  The following sections
+demonstrate how to list the tables in your schema/database.
+
+### List tables in your current database (option 1)
+
+This lists tables using the mysql-specific *show tables* command.
+
+```{python}
+run_sql_and_return_html(cnx,"""
+show tables
+""")
+```
+
+
+## List tables in your current database (option 2)
+
+This code gets the table names from the *information_schema* database.
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+  TABLE_SCHEMA, TABLE_NAME
+FROM
+  INFORMATION_SCHEMA.TABLES
+WHERE
+  TABLE_SCHEMA = '{config['database']}'
+ORDER BY
+  TABLE_NAME
+""")
+```
+
+Note that it's referencing the database name that was loaded from your *.env* file.
+
+## List tables in your current database (option 3)
+
+The *columns* table in your *INFORMATION_SCHEMA* provides details on all the columns
+for all of the tables.  We can pull the table names from here, too.
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+  TABLE_NAME
+FROM
+  INFORMATION_SCHEMA.COLUMNS
+WHERE
+  1=1
+  AND TABLE_SCHEMA = '{config['database']}'
+GROUP BY
+  TABLE_NAME
+ORDER BY
+  TABLE_NAME
+""")
+```
+
+
+## Exploring the different tables in the *hr* database
+
+We can view the tables in our default database, that is, the one named in the connection
+string using the `SHOW TABLES` command.
+
+## List all columns for all the tables in your current database 
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE
+FROM
+  INFORMATION_SCHEMA.COLUMNS
+WHERE
+  1=1
+  AND TABLE_SCHEMA = '{config['database']}'
+ORDER BY
+  TABLE_NAME, ORDINAL_POSITION
+""")
+```
+
+```{python}
+run_sql_and_return_df(cnx,f"""
+SELECT 
+  TABLE_NAME, ORDINAL_POSITION, COLUMN_NAME, COLUMN_TYPE
+FROM
+  INFORMATION_SCHEMA.COLUMNS
+WHERE
+  1=1
+  AND TABLE_SCHEMA = '{config['database']}'
+ORDER BY
+  TABLE_NAME, ORDINAL_POSITION
+""")
+```
+
+
+## Next steps
+
+At this point, you're able to connect to a mysql DBMS and
+navigate your way around.
+
+Head over to the *report.qmd* file to begin the assignment!

@@ -1,0 +1,561 @@
+---
+title: Homework 9 - World Bank - Population Analysis
+---
+
+Hello! 
+
+And welcome to Homework 9! This is our final Homework assignment! This assignment will be another crash course of SQL queries to solve!
+
+I will be solving all 9 queries below, and the finished code will be printed below, above each output! This allows you to see not only the outputs of the data, but what each query looks like behind the scenes! I have had a great semester, and have learned a lot about SQL! 
+
+Please use each of these reports as a moderate progression through Relational Algebra, ER Diagrams, and SQL! Enjoy!
+
+
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw9-serrotrehpotsirhc.git>
+
+This assignment focuses on the SELECT statement with joins and other fun features.  As context, we'll be conducting an analysis of some real-world data use SQL to reveal answers.
+
+# Problem Background
+
+I have been hired by the World Bank as a data analyst charged with working with the World Development Indicator database.
+
+This week I will continue working with the World Development Indicator database.The World Development Indicators (WDI) database is a comprehensive and extensive database maintained by the World Bank, offering a wealth of statistical information on various facets of global development.
+
+The WDI database includes data on economic indicators like GDP, inflation rates, and trade, as well as social indicators such as education, health, and poverty. Researchers, policymakers, analysts and students in CMSC 408 use the WDI to track development progress, conduct comparative analyses, and make informed decisions to improve the well-being of people around the world.
+
+For this assignment we’ll be playing with population indicators in the WDI. We’ll be building on the skills learned in the previous week to develop additional perspectives on the world.
+
+Here we go!
+
+```{python}
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file, execute_ddl
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW9_USER",
+  'password': "CMSC408_HW9_PASSWORD",
+  'host': "CMSC408_HW9_HOST",
+  'database': "CMSC408_HW9_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+  
+```
+
+You should see 3 tables in the list below.
+
+
+```{python}
+# Do a quick test of the connection by listing all the WDI table in the world_bank_data schema.
+
+run_sql_and_return_html(cnx,f"""
+select
+  table_schema, table_name, table_rows
+from
+  information_schema.tables
+where
+  1=1
+  and table_name like 'wdi%%'
+  and table_schema = 'world_bank_data';
+""")
+
+```
+
+# Exercises
+
+## Task 1
+
+Clean up your _users_ schema.  Drop all the tables.  NOTE - if you have foreign keys
+set up in the schema, the order that you drop files will matter!
+
+```{python}
+# Drop wdi_country
+sql = """
+drop table if exists wdi_country;
+drop table if exists wdi_series;
+drop table if exists wdi_data;
+drop table if exists wdi_data_stacked;
+-- drop all other files in your schema.  It should be empty!
+commit;
+"""
+execute_ddl( cnx, sql );
+```
+
+Verify that it all worked.  This query should return "no records returned".
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+select
+  table_schema, table_name, table_rows
+from
+  information_schema.tables
+where
+  1=1
+  and table_name like 'wdi%%'
+  and table_schema = DATABASE();
+""")
+```
+
+
+## Task 2
+
+Create a local copy of wdi_data with just countries.  
+
+```{python}
+execute_ddl( cnx, """
+CREATE TABLE wdi_country
+SELECT *
+FROM world_bank_data.wdi_country
+WHERE `Table Name` IS NOT NULL
+  AND `Region` IS NOT NULL;
+""")
+```
+
+Verify that you've got the correct number of countries.
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 'wdi_country', COUNT(*) FROM wdi_country;
+""")
+```
+
+## Task 3
+
+
+```{python}
+## OK, but what the heck are these datum?  The WDI_SERIES data offer
+## "meta-data" that describes the "data" in the WDI_DATA file.  WRITE
+## a query that provides descriptions for the indicators in the WDI_DATA
+## table using information from the WDI_SERIES table.
+##
+## Your result should include 3 columns (series code, indicator name and
+## long definition)
+##
+## You need to determine which columns join the two tables.
+##
+## ALSO, use this filter:  where `Series Code` like 'SP.POP.TOTL%%'
+##
+## Use tables from the `world_bank_data` schema.  DO NOT make local copies!
+## 
+## (skills: select, subquery)
+
+run_sql_and_return_html(cnx,"""
+SELECT `Series Code`, `Indicator Name`, `Long definition`
+FROM world_bank_data.wdi_series
+WHERE `Series Code` LIKE 'SP.POP.TOTL%%'
+""")
+```
+
+## Task 4
+
+```{python}
+## INTERESTING! Now let's work with the WDI_DATA table.
+##
+## To start, write a quick query that takes a peek at the first
+## 10 records or so of WDI_DATA.
+##
+## Umh... It seems that each row of the WDI_SERIES file contains
+## data for a single measure (or indicator) for the years 1960 to 2023
+##
+## ARE YOU READY?
+##
+## What was the world population in 1960 and in 2023?
+##
+## (your result should have 5 columns, the country name, the indicator name,
+## the indicator code, and the populations in 1960 and the population in 2023).
+##
+## Remember how we eliminated all the "non-country" codes from WDI_COUNTRY
+## back in task 2?  The WDI_DATA table still contains them.
+##
+## BUT - that is OK, because one of the country names is "World".
+## Looking at the results of Task 3 - also filter on the most appropriate
+## `Indicator Code`.
+##
+## SO, keeping it simple, there are no joins or subqueries.
+## Your result should have 5 columns and 1 row.
+## ALSO, use FORMAT to make the resulting values pretty!
+#
+## (skills: select)
+##
+run_sql_and_return_html(cnx,"""
+SELECT 
+    `Country Name`, 
+    `Indicator Name`, 
+    `Indicator Code`, 
+    FORMAT(`1960`, 0) AS `1960 Population`, 
+    FORMAT(`2023`, 0) AS `2023 Population`
+FROM world_bank_data.wdi_data
+WHERE `Country Name` = 'World'
+  AND `Indicator Code` = 'SP.POP.TOTL';
+""")
+```
+
+## Task 5
+
+```{python}
+## That was fun! Let's investigate the other SP.POP.TOTL values.
+## Use a filter `Indicator Code` like 'SP.POP.TOTL%%'
+##
+## (your result should have 5 columns, the country name, the indicator name,
+## the indicator code, and the populations in 1960 and the population in 2023).
+##
+## (keeping it simple, there are no joins necessary.)
+## (skills: select)
+##
+
+run_sql_and_return_html(cnx,"""
+SELECT
+    `Country Name`, 
+    `Indicator Name`, 
+    `Indicator Code`, 
+    FORMAT(`1960`, 0) AS `1960 Population`, 
+    FORMAT(`2023`, 0) AS `2023 Population`
+FROM world_bank_data.wdi_data
+WHERE `Indicator Code` LIKE 'SP.POP.TOTL%%'
+LIMIT 5;
+""")
+```
+
+
+## Task 6
+
+```{python}
+## What is the percentage of females in the world in 1960 and in 2023,
+## compared with the percentage of females in the US?
+##
+## The pre-calculated values are rounded to the nearest percent.  We need
+## at least 3 digits past the decimal point.  SO, we're going to have
+## to calculate it ourselves.
+##
+## (your result should consist of two rows ('World' and 'United States') and four columns:
+## the country name, the description ("Percent female"), the 1960
+## percent female and the 2023 percent female.
+##
+## Numeric values should show 3 places past the decimal AND include a 
+## % sign,  e.g., 33.333%  or 59.151%)
+##
+## (skills: select, aggregate, subquery/with, format, concat)
+
+
+execute_ddl(cnx, """
+DROP TABLE IF EXISTS wdi_data_stacked;
+
+CREATE TABLE wdi_data_stacked AS
+SELECT `Country Code`, `Indicator Code`, '1960' AS year_code, `1960` AS value
+FROM world_bank_data.wdi_data
+WHERE `Indicator Code` IN ('SP.POP.TOTL', 'SP.POP.TOTL.FE.IN')
+UNION
+SELECT `Country Code`, `Indicator Code`, '2023', `2023`
+FROM world_bank_data.wdi_data
+WHERE `Indicator Code` IN ('SP.POP.TOTL', 'SP.POP.TOTL.FE.IN');
+""")
+
+
+run_sql_and_return_html(cnx, """
+WITH pop_data AS (
+    SELECT
+        `Country Code` AS country_code,
+        year_code AS year,
+        `Indicator Code` AS indicator_code,
+        value
+    FROM
+        wdi_data_stacked
+    WHERE
+        `Indicator Code` IN ('SP.POP.TOTL', 'SP.POP.TOTL.FE.IN')
+        AND year_code IN ('1960', '2023')
+        AND `Country Code` IN ('WLD', 'USA')
+),
+pivoted AS (
+    SELECT
+        country_code,
+        year,
+        MAX(CASE WHEN indicator_code = 'SP.POP.TOTL.FE.IN' THEN value END) AS female_pop,
+        MAX(CASE WHEN indicator_code = 'SP.POP.TOTL' THEN value END) AS total_pop
+    FROM
+        pop_data
+    GROUP BY
+        country_code, year
+),
+percent_female AS (
+    SELECT
+        country_code,
+        year,
+        (female_pop / total_pop * 100) AS pct_female
+    FROM
+        pivoted
+),
+formatted AS (
+    SELECT
+        CASE
+            WHEN country_code = 'WLD' THEN 'World'
+            WHEN country_code = 'USA' THEN 'United States'
+        END AS country,
+        'Percent female' AS description,
+        year,
+        CONCAT(FORMAT(ROUND(pct_female, 3), 3), '%%') AS pct_female
+    FROM
+        percent_female
+)
+SELECT
+    country,
+    description,
+    MAX(CASE WHEN year = '1960' THEN pct_female END) AS `1960`,
+    MAX(CASE WHEN year = '2023' THEN pct_female END) AS `2023`
+FROM
+    formatted
+GROUP BY
+    country, description
+ORDER BY
+    country;
+""")
+
+```
+
+## Task 7
+
+
+```{python}
+## WOW! that was difficult! Seems like a lot of work, forced to hardcode
+## years and values just to calculate percentages for these data.
+##
+## IS THERE A SIMPLER WAY?
+##
+## When doing data analysis, how your data are stacked make a difference.
+## Our lives would be much simpler if we rearranged the data with indicators
+## in the columns and years in the rows.
+##
+## BUT HOW??  
+##
+## The table WDI_DATA is currently stored in what is call a "wide format".
+## The data can be transformed into a more manageble format, in this case
+## a "stacked format" that will let us pivot things around much simpler.
+##
+## Create a new table named "wdi_data_stacked" containing stacked data from
+## WDI_DATA. Each row should have four columns: country_code, indicator_code,
+## year_code, and a value associated with the year.
+##
+## Filter WDI_DATA on just the population code 'SP.POP.TOTL%%' 
+## Keep all country codes.
+##
+## Stack data for 1960, 1970, 1980, 1990, 2000, 2010, and 2020
+## (skills: create table with select, UNION)
+
+execute_ddl(cnx,"""
+DROP TABLE IF EXISTS wdi_data_stacked;
+
+CREATE TABLE wdi_data_stacked AS
+SELECT `Country Code` AS country_code, 
+       `Indicator Code` AS indicator_code, 
+       '1960' AS year_code, `1960` AS value
+FROM world_bank_data.wdi_data
+WHERE `1960` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '1970', `1970`
+FROM world_bank_data.wdi_data
+WHERE `1970` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '1980', `1980`
+FROM world_bank_data.wdi_data
+WHERE `1980` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '1990', `1990`
+FROM world_bank_data.wdi_data
+WHERE `1990` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '2000', `2000`
+FROM world_bank_data.wdi_data
+WHERE `2000` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '2010', `2010`
+FROM world_bank_data.wdi_data
+WHERE `2010` IS NOT NULL
+UNION
+SELECT `Country Code`, `Indicator Code`, '2020', `2020`
+FROM world_bank_data.wdi_data
+WHERE `2020` IS NOT NULL;
+""")
+```
+
+```{python}
+## Verify the number of records
+run_sql_and_return_html(cnx,"""
+SELECT * FROM wdi_data_stacked LIMIT 10;
+""")
+```
+
+## Task 8
+
+
+## Task 8
+
+```{python}
+## Time to get practice working with our newly stacked data!
+##
+## Create a summary table of the number of records in each year bundle
+
+run_sql_and_return_html(cnx,"""
+SELECT year_code, COUNT(*) AS record_count
+FROM wdi_data_stacked
+GROUP BY year_code
+ORDER BY year_code;
+""")
+```
+
+## Task 9
+
+```{python}
+## Phew. Glad that's over!  Let's recalculate percentage females for the
+## World and all decade years in our new wdi_data_stacked table.
+##
+## Your result should have five columns: country code, yeear, pct female,
+## pop female, and total pop.
+##  
+## (skills: select, aggregate, WITH/subquery, FORMAT)
+##
+
+run_sql_and_return_html(cnx,"""
+WITH PopData AS (
+    SELECT 
+        year_code,
+        MAX(CASE WHEN `Indicator Code` = 'SP.POP.TOTL.FE.IN' THEN value END) AS pop_female,
+        MAX(CASE WHEN `Indicator Code` = 'SP.POP.TOTL' THEN value END) AS total_pop
+    FROM wdi_data_stacked
+    WHERE `Country Code` = 'WLD'
+    GROUP BY year_code
+)
+SELECT 
+    'WLD' AS country_code,
+    year_code,
+    CONCAT(FORMAT((pop_female / total_pop) * 100, 3), '%%') AS pct_female,
+    FORMAT(pop_female, 0) AS pop_female,
+    FORMAT(total_pop, 0) AS total_pop
+FROM PopData
+ORDER BY year_code;
+""")
+
+```
+
+## Task 10
+
+```{python}
+## Cool. Now let's compare the Pct. Female of US with the World over
+## all the decade years.
+##
+## You'll only need to modify the query from Task 9!
+## Your final table should have three columns: Year, US-Pct-Female and World-PCT-Female
+## and one row per year (1960, 1970, etc.)
+##
+## (skills: select, aggregate, WITH/subquery, FORMAT)
+##
+
+run_sql_and_return_html(cnx,"""
+WITH PopData AS (
+    SELECT 
+        year_code,
+        `Country Code`,
+        MAX(CASE WHEN `Indicator Code` = 'SP.POP.TOTL.FE.IN' THEN value END) AS pop_female,
+        MAX(CASE WHEN `Indicator Code` = 'SP.POP.TOTL' THEN value END) AS total_pop
+    FROM wdi_data_stacked
+    WHERE `Country Code` IN ('WLD', 'USA')
+    GROUP BY year_code, `Country Code`
+),
+Pivoted AS (
+    SELECT 
+        year_code,
+        MAX(CASE WHEN `Country Code` = 'USA' THEN (pop_female / total_pop) * 100 END) AS us_pct,
+        MAX(CASE WHEN `Country Code` = 'WLD' THEN (pop_female / total_pop) * 100 END) AS world_pct
+    FROM PopData
+    GROUP BY year_code
+)
+SELECT 
+    year_code AS Year,
+    CONCAT(FORMAT(us_pct, 3), '%%') AS `US-Pct-Female`,
+    CONCAT(FORMAT(world_pct, 3), '%%') AS `World-Pct-Female`
+FROM Pivoted
+ORDER BY year_code;
+""")
+```
+
+## Task 11
+
+```{python}
+## OK. Ghost-pepper hot is nothing.  This is WAY HOTTER than that!!!
+##
+## Prepare a table comparing pct female by region in the world (rows) by
+## decade (columns, 1960-2020).
+##
+## This is very much like Tasks 9 and 10, except you'll need to do a bit more
+## pre-processing to map country codes to regions using our cleaned wdi_country table
+## from the earlier tasks.
+##
+## Build your query in layers, one WITH CTE at a time, checking each CTE to make sure
+## you've gathered the data that you need.
+##
+## Steps:
+## 1) Join wdi_country to wdi_data_stacked on `Country Code` for each year and indicator and country code and region
+## 2) then, following task 9, aggregate the female and total populations to columns by region and year
+## 3) then calculate the pct female for each year and region pair,
+## 4) pivot out (using CASE) the years
+##
+## (skills: select, aggregate, WITH/subquery, CASE, FORMAT)
+##
+
+run_sql_and_return_html(cnx,"""
+WITH RawData AS (
+    SELECT 
+        c.Region,
+        d.year_code,
+        SUM(CASE WHEN d.`Indicator Code` = 'SP.POP.TOTL.FE.IN' THEN d.value END) AS pop_female,
+        SUM(CASE WHEN d.`Indicator Code` = 'SP.POP.TOTL' THEN d.value END) AS total_pop
+    FROM wdi_data_stacked d
+    JOIN wdi_country c ON d.`Country Code` = c.`Country Code`
+    GROUP BY c.Region, d.year_code
+),
+PctData AS (
+    SELECT 
+        Region,
+        year_code,
+        (pop_female / total_pop) * 100 AS pct_female
+    FROM RawData
+)
+SELECT 
+    Region,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '1960' THEN pct_female END), 3), '%%') AS `1960`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '1970' THEN pct_female END), 3), '%%') AS `1970`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '1980' THEN pct_female END), 3), '%%') AS `1980`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '1990' THEN pct_female END), 3), '%%') AS `1990`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '2000' THEN pct_female END), 3), '%%') AS `2000`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '2010' THEN pct_female END), 3), '%%') AS `2010`,
+    CONCAT(FORMAT(MAX(CASE WHEN year_code = '2020' THEN pct_female END), 3), '%%') AS `2020`
+FROM PctData
+GROUP BY Region
+ORDER BY Region;
+""")
+```
+
+## Done!
+
+
+# Reflection
+
+1. In Task 3, you worked on joining tables to retrieve metadata describing the data in the WDI_DATA table. Reflect on the process of identifying relationships between tables. Why is understanding metadata important when working with datasets, and how does it enhance your ability to interpret and analyze the data?
+
+For Task 3, we needed to work with WDI_SERIES data, which offers "meta-data" that describes the "data" in the WDI_DATA file.  I wrote a query that provides descriptions for the indicators in the WDI_DATA table using information from the WDI_SERIES table. My result includes 3 columns (series code, indicator name and long definition). I did not make any local copies. I did use the Series Code, but the percent icon wasn't being accepted. To complete this, I merely selected the name and definition from the WDI_SERIES table in the WORLD_BANK_DATA database. That was it! Understanding meta data is critical when working with datasets because it allows us to understand the purpose of each facet of the database, ensuring we interact with it properly, and utilize it in optimized ways!
+
+2. Task 7 required transforming data from a wide format to a stacked format to simplify further analysis. What challenges did you encounter while designing and implementing this transformation? How might changing the format of data impact the efficiency of queries and analyses in real-world scenarios?
+
+The table WDI_DATA is currently stored in what is call a "wide format".The data can be transformed into a more manageble format, in this case a "stacked format" that will let us pivot things around much simpler. We created a new table named "wdi_data_stacked" containing stacked data from
+WDI_DATA. Each row has four columns: country_code, indicator_code, year_code, and a value associated with the year. We filtered WDI_DATA on just the population code 'SP.POP.TOTL%%.' Changing the format of data is crucial to being able to manipulate it efficiently and properly! When we are able to change the format of the data, we can optimize its filtering and distribution across the metircs we are focusing on! This is half the battle!
+
+
+3. Task 11 involved using Common Table Expressions (CTEs) to build a query incrementally, combining multiple layers of data processing. How did using CTEs help you organize and debug your query? Reflect on the advantages and potential challenges of using CTEs in SQL for complex data aggregations and transformations.
+
+Using Common Table Expressions (CTEs) in Task 11 allowed us to break down the query into smaller, manageable steps, making it easier to organize and debug. Each CTE represented a logical step in the data processing pipeline, enabling us to validate intermediate results before proceeding to the next step. This incremental approach reduced the complexity of the final query and made it more readable. Potential challenges are data complexity and performace. Advantages include increased Readability and Usability.
+
+# README
+
+Below is the README from my project.
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::

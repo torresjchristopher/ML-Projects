@@ -1,0 +1,172 @@
+---
+title: Homework 5 - Documenting an HR database
+# NOTE - the _quarto.yml file contains your name, email and other goodies.
+---
+
+As a highly prized and chased database wizard, you've been hired at an exorbitant hourly rate asked to document an HR database of a fortune 1_000_000 company.
+
+You've been given credentials to the database.  (See course slides and/or lecture video!)
+
+Your tasks are to submit a report that contains:
+
+1. A general written description of contents of database,
+1. A Chen diagram highlighting the major entities and relations,
+1. A Crows-foot diagram highlighting the entities, attributes, and the cardinality and participation of the relations,
+1. A python-generated listing of SQL tables and fields, and
+1. A listing of sample data showing the first bunch (5 or 10 or so) of EACH table.
+1. All this will be documented in the report and the HTML report will be uploaded to canvas.
+
+(Update this link with your github URL! and then delete this comment.)
+
+**Github repo:** <https://github.com/cmsc-vcu/cmsc408-sp2025-hw5-template>
+
+
+# Database design
+
+The following sections document the general design of the HR database.
+
+## General description
+
+(your description of the database goes here.  One or two paragraphs should suffice.  What is the purpose of the database? What are the
+major tables/relations?  What is stored in each table? Any other
+interesting features?)
+
+## Chen diagram
+
+The following diagram highlights the major relations in the database.
+
+## Crows foot diagram
+
+The following diagram provides greater detail on the entities and attributes and highlights the cardinality and participation of the relations.
+
+## Listing of tables in the database
+
+The following python blocks highlight the steps used to document the tables in the database.  The code is left in the report to show how fun it was to write python!
+
+### Create connection
+
+(what is this code doing? Please write a sentence or two documenting this python code. Feel free to explore the python in the *helpers.py* file.)
+
+```{python}
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW5_USER",
+  'password': "CMSC408_HW5_PASSWORD",
+  'host': "CMSC408_HW5_HOST",
+  'database': "CMSC408_HW5_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+    
+```
+
+### List of tables found in HR database
+
+(copy/paste appropriate code from explore.html)
+(Add a description of what's happening IN YOUR OWN WORDS!)
+
+(be sure to update the SQL with YOUR HR schema/database name!)
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+SELECT 
+  TABLE_NAME, TABLE_TYPE
+FROM
+  INFORMATION_SCHEMA.TABLES 
+WHERE
+  TABLE_SCHEMA = 'sp25_template_hr'
+ORDER BY
+  TABLE_NAME
+""")
+```
+
+
+# Listing of Tables and sample data
+
+The following sections provide a high-level view of the data found in the HR database.
+
+(copy/paste approriate code from explore.html)
+(Add a description of what's happening IN YOUR OWN WORDS!)
+
+## Table: countries
+
+The *counties* table contains data about the locations of the various offices and departments of the company.
+
+### Schema: countries
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+select 'Replace my code with yours!' from dual
+""")
+```
+
+### Sample data: countries
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+select 'Replace my code with yours!' from dual
+""")
+```
+
+## Table: departments
+
+The *departments* table contains ...
+
+### Schema: departments
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+select 'Replace my code with yours!' from dual
+""")
+```
+
+### Sample data: departments
+
+
+```{python}
+run_sql_and_return_html(cnx,f"""
+select 'Replace my code with yours!' from dual
+""")
+```
+
+## Table: ...
+
+(add a section block for each additional table in database.)
+
+### Schema: ...
+
+### Sample data: ...
+
+
+
+# Reflection
+
+(Delete this text and replace it with your reflections:)
+
+Please add a paragraph or two about how this project went.
+: (response here)
+
+Was it harder or easier than you expected?
+: (response here)
+
+Did the instructor provide too much information or not enough information?
+: (response here)
+
+Do you have suggestions for how it can be improved?
+: (response here)
+
+
+# README
+
+A quality README is an important part of EVERY project. Using the Quarto *include* command we're including a copy of your README in the project report so that a human can evaluate it.
+
+Make sure that you edit the README so that it's explanatory!  Note that you don't need a readme within the *reports* folder for this assignment. We're only
+focused on the root *README.md*.
+
+[Here is some info](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/) on how to write a good README!
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::

@@ -1,0 +1,45 @@
+---
+title: Example 4
+date: last-modified
+---
+
+One of the most important proofs in relational algebra is the **equivalence of relational operators**, particularly the equivalence between **selection** and **projection** operations when combined with joins or Cartesian products. These proofs are essential for query optimization, as they show how queries can be rewritten to improve efficiency without changing the result.
+
+## Commutativity of Selection and Join
+
+One of the key equivalences in relational algebra is the **commutativity of selection** ( $\sigma$ ) and **natural join** ( $\bowtie$ ). This equivalence allows database query optimizers to push selection operations down, which can significantly improve performance by reducing the size of intermediate relations.
+
+### The theorem
+
+For relations $R$ and $S$, and a condition $\theta$, the following holds:
+
+$$
+\sigma_{\theta}(R \bowtie S) = R \bowtie \sigma_{\theta}(S)
+$$
+
+In words: a selection on the result of a join is equivalent to a join where the selection has already been applied to one of the relations.
+
+### Proof:
+
+1. Left-hand side (LHS):
+   
+   Consider $\sigma_{\theta}(R \bowtie S)$, which means first performing the natural join $R \bowtie S$ and then applying the selection $\sigma_{\theta}$ on the resulting relation. So, we join the tuples from $R$ and $S$, then select the ones that satisfy the condition $\theta$.
+
+2. Right-hand side (RHS):
+   
+   On the right-hand side, we first apply the selection $\sigma_{\theta}(S)$, meaning we select tuples from $S$ that satisfy $\theta$, and then we perform the join of $R$ with this smaller relation $\sigma_{\theta}(S)$.
+
+3. Equivalence:
+   
+   Since selection $\sigma$ only affects tuples in $S$, it does not change the result of the join if applied before or after. In both cases, the join produces tuples where $R$ and $S$ agree on their common attributes, and the condition $\theta$ applies only to $S$.
+
+   Therefore:
+
+   $$ 
+   \sigma_{\theta}(R \bowtie S) = R \bowtie \sigma_{\theta}(S)
+   $$
+
+### Importance in Query Optimization
+This proof is fundamental because it underpins one of the key techniques used in **query optimization**: **pushing selections down** in a query plan. By applying selection operations early (before the join), the system can work with smaller relations and therefore execute the query more efficiently.
+
+This kind of equivalence is used in relational database systems to transform and optimize queries, making them faster to execute without changing their meaning.

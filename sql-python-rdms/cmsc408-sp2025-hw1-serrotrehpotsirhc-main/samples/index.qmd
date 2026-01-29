@@ -1,0 +1,13 @@
+---
+title: home page for homework 1
+author:
+    - name: Skippy McBoatface
+      email: skippy@mcboatface
+date: last-modified
+---
+
+[Mermaid](mermaid.html)
+
+[GraphViz](graphviz.html)
+
+[Gantt](gantt.html)

@@ -1,0 +1,10 @@
+project:
+  output-dir: .
+  
+format:
+  html:
+    embed-resources: true
+    html-math-method: katex
+    theme: spacelab
+    toc: true
+

@@ -1,0 +1,12 @@
+author: John Leonard
+date: last-modified
+format:
+    html:
+        theme: cosmo
+        toc: true
+        embed-resources: true
+        code-copy: true
+execute:
+    cache: false
+    echo: false
+    eval: true

@@ -1,0 +1,51 @@
+---
+title: Implementation - Deliverable 7
+---
+
+(brief 2-3 sentence description of this document and this project.)
+
+* [[Link to repository](https://github.com/cmsc-vcu/cmsc408-sp2025-semproj-template)]
+* [[Direct link to video pitch](https://github.com/cmsc-vcu/cmsc408-sp2025-semproj-template)]
+* [[Direct link to design video](https://github.com/cmsc-vcu/cmsc408-sp2025-semproj-template)]
+* [[Direct link to implementation video](https://github.com/cmsc-vcu/cmsc408-sp2025-semproj-template)]
+
+# Design video
+
+(
+JUST LIKE DELIVERABLE 4 and 5, embed a 4-5 minute video presentation.  In this video
+you should summarize your implemention, how it went, how you design might have
+needed to be modified during implementation, and your reflections on the overall process. 
+
+Your video should DEMONSTRATE your working implementation.
+)
+
+# hello world!
+
+No scaffold is provided for this QMD.  You need to create it yourself!
+
+Time to be creative! I provided scaffolds all through the semester.  The training wheels
+are coming off and it's time for you to shine!
+
+DELETE the *hello world!* section and replace it with your own sections and subsections.  This is your team report!
+
+Your report should touch on all the elements discussed in the project description.  You
+can certainly refer to sections of previous reports.
+
+This document should be STAND-ALONE. That is, you shouldn't need to refer to other documents
+to get your points across.
+
+See: <https://virginiacommonwealth.instructure.com/courses/113813/assignments/1075774>
+
+
+# Reflection
+
+How was your overall experience with this semester-long project?
+: (answer here)
+
+How did the homeworks and discussions prepare you (or not) for successful completion of this project?
+: (answer here)
+
+What advice would you give to students working on this project in the future?
+: (answer here)
+
+
