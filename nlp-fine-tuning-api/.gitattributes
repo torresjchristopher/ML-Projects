@@ -1,0 +1,5 @@
+# Treat Jupyter notebooks as binary for some merges and configure an IPYNB diff driver.
+# This helps reduce noisy diffs; configure your local git to use nbstripout or nbdime if desired.
+*.ipynb   diff=ipynb
+*.py      text=auto
+README.md text=auto

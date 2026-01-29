@@ -1,0 +1,8 @@
+# Dev/test dependencies
+pytest
+nbval
+pre-commit
+flake8
+black
+isort
+nbstripout
